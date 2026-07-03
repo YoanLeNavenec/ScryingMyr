@@ -1,0 +1,15 @@
+{
+  "name": "scryingmyr",
+  "version": "1.0.0",
+  "description": "An AI-Powered, locally hosted deckbuilding and learning tool aimed at MTG players! Beginners or veterans, this little myr is always happy to help!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "stream-json": "^2.1.0"
+  }
+}

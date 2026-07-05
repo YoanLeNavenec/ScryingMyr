@@ -11,9 +11,17 @@
   flex-direction: column;
   width: 60px;
   height: 100%;
+  padding: 0 0.5rem;
   padding-top: 1rem;
   background-color: var(--sidebar);
   border-right: 1px solid var(--sidebar-border);
+}
+
+.app-logo{
+  width: 48px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .nav-item {
@@ -46,6 +54,22 @@ ul {
 
 .nav-item:hover {
   background-color: var(--sidebar-accent);
+}
+
+.nav-bottom {
+  margin-top: auto;
+  padding-bottom: 1rem;
+}
+
+.nav-bottom button{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  background:none;
+  border:none;
+  color: var(--sidebar-foreground);
+  padding: 0.75rem 0;
 }
 
 .app-main {

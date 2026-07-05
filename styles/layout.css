@@ -7,10 +7,45 @@
 }
 
 .app-nav {
-  width: 250px;
+  display: flex;
+  flex-direction: column;
+  width: 60px;
   height: 100%;
+  padding-top: 1rem;
   background-color: var(--sidebar);
   border-right: 1px solid var(--sidebar-border);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  cursor: pointer;
+  color: var(--sidebar-foreground);
+  border-radius: 0.25rem;
+  justify-content: center;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.nav-item span {
+  display: none;
+}
+
+.nav-item i{
+  width: 24px;
+  height: 24px;
+}
+
+.nav-item:hover {
+  background-color: var(--sidebar-accent);
 }
 
 .app-main {

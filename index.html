@@ -7,13 +7,20 @@
     <link rel="stylesheet" href="styles/variables.css">
     <link rel="stylesheet" href="styles/layout.css">
     <link rel="stylesheet" href="styles/reset.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
     <div class="app-container">
       <nav class="app-nav">
+        <ul>
+          <li class="nav-item"><i data-lucide="message-circle"></i><span>Chat</span></li>
+          <li class="nav-item"><i data-lucide="layout-grid"></i><span>Deckbuilding Assistant</span></li>
+          <li class="nav-item"><i data-lucide="arrow-left-right"></i><span>Export/Import</span></li>
+        </ul>
       </nav>
       <main class="app-main">
       </main>
     </div>
+    <script>lucide.createIcons();</script>
 </body>
 </html>

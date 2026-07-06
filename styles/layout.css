@@ -73,7 +73,10 @@ ul {
 }
 
 .app-main {
+  display: flex;
+  align-items: center;
   flex: 1;
   height: 100%;
+  padding: 1rem;
   background-color: var(--background);
 }

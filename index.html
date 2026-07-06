@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scrying Myr</title>
+    <link rel="stylesheet" href="styles/reset.css">
     <link rel="stylesheet" href="styles/variables.css">
     <link rel="stylesheet" href="styles/layout.css">
-    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/chat.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -23,6 +24,14 @@
         </div>
       </nav>
       <main class="app-main">
+        <div class="chat-container">
+          <div class="chat-history">
+          </div>
+          <div class="chat-input-area">
+            <textarea class="chat-input" placeholder="What's on your mind?"></textarea>
+            <button class="chat-send-button"><i data-lucide="send"></i></button>
+          </div>
+        </div>
       </main>
     </div>
     <script>lucide.createIcons();</script>

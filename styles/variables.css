@@ -1,7 +1,7 @@
 :root {
-    --background: #fdfcfc;
+    --background: #c8bfba;
     --foreground: #281515;
-    --card: #ffffff;
+    --card: #e8e2df;
     --card-foreground: #281515;
     --popover: #ffffff;
     --popover-foreground: #281515;
@@ -15,16 +15,16 @@
     --accent-foreground: #ffffff;
     --destructive: #ef4444;
     --destructive-foreground: #ffffff;
-    --border: #ebe0e0;
+    --border: #c4b8b3;
     --input: #ebe0e0;
     --ring: #a3a3a3;
-    --sidebar: #ffffff;
+    --sidebar: #b0a59e;
     --sidebar-foreground: #281515;
     --sidebar-primary: #a4a4a4;
     --sidebar-primary-foreground: #0a0a0a;
     --sidebar-accent: #f7f2f2;
     --sidebar-accent-foreground: #281515;
-    --sidebar-border: #ebe0e0;
+    --sidebar-border: #b8afa9;
     --sidebar-ring: #a3a3a3;
 }
 

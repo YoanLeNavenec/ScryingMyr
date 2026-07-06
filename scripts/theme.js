@@ -1,4 +1,6 @@
 const ThemeEl = document.documentElement;
+ThemeEl.setAttribute('data-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
 const ThemeButton = document.querySelector('.dark-light');
 
 ThemeButton.addEventListener('click', () => {

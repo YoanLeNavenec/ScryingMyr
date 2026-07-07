@@ -15,23 +15,29 @@
       <nav class="app-nav">
         <img src="assets/LogoSimply.png" alt="A silver myr reading a book" class="app-logo">
         <ul>
-          <li class="nav-item"><button aria-label="chat with Myr"><i data-lucide="message-circle"></i><span>Chat</span></button></li>
-          <li class="nav-item"><button aria-label="view chat history"><i data-lucide="history"></i><span>Chat History</span></button></li>
-          <li class="nav-item"><button aria-label="use deckbuilding assistant"><i data-lucide="layout-grid"></i><span>Deckbuilding Assistant</span></button></li>
-          <li class="nav-item"><button aria-label="export or import decks"><i data-lucide="arrow-left-right"></i><span>Export/Import</span></button></li>
+          <li class="nav-item"><button aria-label="chat with Myr" data-view="chat-view"><i data-lucide="message-circle"></i><span>Chat</span></button></li>
+          <li class="nav-item"><button aria-label="view chat history" data-view="history-view"><i data-lucide="history"></i><span>Chat History</span></button></li>
+          <li class="nav-item"><button aria-label="use deckbuilding assistant" data-view="deckbuilding-view"><i data-lucide="layout-grid"></i><span>Deckbuilding Assistant</span></button></li>
+          <li class="nav-item"><button aria-label="export or import decks" data-view="export-import-view"><i data-lucide="arrow-left-right"></i><span>Export/Import</span></button></li>
         </ul>
         <div class="nav-bottom">
           <button class="dark-light" aria-label="switch light/dark mode"><i data-lucide="sun-moon"><span>Light/Dark mode</span></i></button>
         </div>
       </nav>
       <main class="app-main">
-        <div class="chat-container">
+        <div class="chat-view view active-view">
           <div class="chat-history">
           </div>
           <div class="chat-input-area">
             <textarea class="chat-input" placeholder="What's on your mind?"></textarea>
             <button class="chat-send-button"><i data-lucide="send"></i></button>
           </div>
+        </div>
+        <div class="history-view view">
+        </div>
+        <div class="deckbuilding-view view">
+        </div>
+        <div class="export-import-view view">
         </div>
       </main>
     </div>

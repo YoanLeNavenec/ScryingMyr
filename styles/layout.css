@@ -1,3 +1,18 @@
+.history-view,
+.deckbuilding-view,
+.export-import-view,
+.chat-view {
+    display: none;
+}
+
+.active-view {
+    display: flex;
+}
+
+.hidden {
+    display: none !important;
+}
+
 .app-container {
   display: flex;
   height: 100vh;

@@ -47,6 +47,19 @@ ul {
   display: none;
 }
 
+.nav-item button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  cursor: pointer;
+  background:none;
+  border:none;
+  color: var(--sidebar-foreground);
+  padding: 0.75rem 0;
+}
+
 .nav-item i{
   width: 24px;
   height: 24px;
@@ -54,6 +67,12 @@ ul {
 
 .nav-item:hover {
   background-color: var(--sidebar-accent);
+}
+
+.nav-item.active button {
+  background-color: var(--highlight);
+  color: var(--sidebar-accent-foreground);
+  border-radius: 0.25rem;
 }
 
 .nav-bottom {

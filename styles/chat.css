@@ -39,15 +39,24 @@
   padding: 0.5rem 1rem;
   background-color: var(--primary);
   color: var(--primary-foreground);
+  transition: background-color 0.2s ease;
   border: none;
   border-radius: 0.25rem;
   cursor: pointer;
 }
 
+.chat-send-button:hover {
+    background-color: var(--highlight);
+    color: var(--accent-foreground);
+    transition: background-color 0.2s ease;
+}
+
 .chat-message {
   color: var(--foreground);
-  padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   background:var(--muted);
   align-self: flex-end;
+  border-radius: 1rem;
+  padding: 0.75rem 1rem;
+  max-width: 70%;
 }

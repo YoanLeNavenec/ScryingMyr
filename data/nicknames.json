@@ -1,0 +1,94 @@
+{
+  "fetchlands": [
+    "Flooded Strand", "Polluted Delta", "Bloodstained Mire", "Wooded Foothills", "Windswept Heath",
+    "Marsh Flats", "Scalding Tarn", "Verdant Catacombs", "Arid Mesa", "Misty Rainforest"
+  ],
+  "shocklands": [
+    "Steam Vents", "Watery Grave", "Blood Crypt", "Stomping Ground", "Temple Garden",
+    "Godless Shrine", "Sacred Foundry", "Breeding Pool", "Overgrown Tomb", "Hallowed Fountain"
+  ],
+  "shocks": "shocklands",
+  "duals": [
+    "Tundra", "Underground Sea", "Badlands", "Taiga", "Savannah",
+    "Scrubland", "Volcanic Island", "Bayou", "Plateau", "Tropical Island"
+  ],
+  "triomes": [
+    "Ketria Triome", "Indatha Triome", "Raugrin Triome", "Zagoth Triome", "Savai Triome",
+    "Raffine's Tower", "Spara's Headquarters", "Xander's Lounge", "Jetmir's Garden", "Ziatora's Proving Ground"
+  ],
+  "painlands": [
+    "Adarkar Wastes", "Underground River", "Sulfurous Springs", "Karplusan Forest", "Brushland",
+    "Caves of Koilos", "Battlefield Forge", "Llanowar Wastes", "Shivan Reef", "Yavimaya Coast"
+  ],
+  "checklands": [
+    "Glacial Fortress", "Drowned Catacomb", "Dragonskull Summit", "Rootbound Crag", "Sunpetal Grove",
+    "Isolated Chapel", "Clifftop Retreat", "Woodland Cemetery", "Sulfur Falls", "Hinterland Harbor"
+  ],
+  "fastlands": [
+    "Seachrome Coast", "Darkslick Shores", "Blackcleave Cliffs", "Copperline Gorge", "Razorverge Thicket",
+    "Concealed Courtyard", "Inspiring Vantage", "Blooming Marsh", "Spirebluff Canal", "Botanical Sanctum"
+  ],
+  "surveil lands": [
+    "Commercial District", "Elegant Parlor", "Hedge Maze", "Lush Portico",
+    "Meticulous Archive", "Raucous Theater", "Shadowy Backstreet",
+    "Thundering Falls", "Undercity Sewers", "Underground Mortuary"
+  ],
+  "bond lands": [
+    "Sea of Clouds", "Morphic Pool", "Luxury Suite", "Spire Garden", "Bountiful Promenade",
+    "Vault of Champions", "Training Center", "Undergrowth Stadium", "Spectator Seating", "Rejuvenating Springs"
+  ],
+  "bolt lands": [
+    "Emeria's Call // Emeria, Shattered Skies",
+    "Sea Gate Restoration // Sea Gate, Reborn",
+    "Agadeem's Awakening // Agadeem, the Undercrypt",
+    "Shatterskull Smashing // Shatterskull, the Hammer Pass",
+    "Turntimber Symbiosis // Turntimber, Serpentine Wood",
+    "Razorgrass Ambush // Razorgrass Field",
+    "Witch Enchanter // Witch-Blessed Meadow",
+    "Hydroelectric Specimen // Hydroelectric Laboratory",
+    "Sink into Stupor // Soporific Springs",
+    "Boggart Trawler // Boggart Bog",
+    "Fell the Profane // Fell Mire",
+    "Pinnacle Monk // Mystic Peak",
+    "Sundering Eruption // Volcanic Fissure",
+    "Bridgeworks Battle // Tanglespan Bridgeworks",
+    "Disciple of Freyalise // Garden of Freyalise"
+  ],
+  "dual lands": "duals",
+  "bilands": "duals",
+  "true duals": "duals",
+  "true dual": "duals",
+  "surveillands": "surveil lands",
+  "fetches": "fetchlands",
+  "bondlands": "bond lands",
+  "crowd lands": "bond lands",
+  "battlebond lands": "bond lands",
+  "mdfc lands": "bolt lands",
+  "bob": "Dark Confidant",
+  "gary": "Gray Merchant of Asphodel",
+  "goyf": "Tarmogoyf",
+  "steve": "Shadowmage Infiltrator",
+  "snap": "Snapcaster Mage",
+  "snapcaster": "Snapcaster Mage",
+  "thoracle": "Thassa's Oracle",
+  "oracle": "Thassa's Oracle",
+  "dockside": "Dockside Extortionist",
+  "dt": "Demonic Tutor",
+  "pita": "Peer into the Abyss",
+  "consultation": "Demonic Consultation",
+  "sevinne's": "Sevinne's Reclamation",
+  "sevinne's rec": "Sevinne's Reclamation",
+  "fatraxa": "Atraxa, Grand Unifier",
+  "fat atraxa": "Atraxa, Grand Unifier",
+  "n4rset": "Narset, Parter of Veils",
+  "4 mana narset": "Narset, Parter of Veils",
+  "sp99": "Spider-Man 2099",
+  "spiderman 2099": "Spider-Man 2099",
+  "spider-man 2099": "Spider-Man 2099",
+  "chunky": "Etali, Primal Conqueror",
+  "chunky etali": "Etali, Primal Conqueror",
+  "big etali": "Etali, Primal Conqueror",
+  "etali": "Etali, Primal Storm",
+  "3ball": "Trinisphere",
+  "three ball": "Trinisphere"
+}

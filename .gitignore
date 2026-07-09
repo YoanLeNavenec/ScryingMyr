@@ -1,4 +1,4 @@
 node_modules/
 .env
 AllPrintings.json
-/data/
+/data/cleanCards.json

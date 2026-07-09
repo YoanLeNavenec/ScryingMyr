@@ -1,0 +1,38 @@
+{
+  "guilds": {
+    "azorius": { "colors": ["W", "U"], "aliases": ["azorius", "WU", "UW", "white blue", "blue white"] },
+    "dimir": { "colors": ["U", "B"], "aliases": ["dimir", "UB", "blue black", "black blue"] },
+    "rakdos": { "colors": ["B", "R"], "aliases": ["rakdos", "BR", "RB", "black red", "red black"] },
+    "gruul": { "colors": ["R", "G"], "aliases": ["gruul", "RG", "GR", "red green", "green red"] },
+    "selesnya": { "colors": ["G", "W"], "aliases": ["selesnya", "GW", "WG", "green white", "white green"] },
+    "orzhov": { "colors": ["W", "B"], "aliases": ["orzhov", "WB", "BW", "white black", "black white"] },
+    "izzet": { "colors": ["U", "R"], "aliases": ["izzet", "UR", "RU", "blue red", "red blue"] },
+    "golgari": { "colors": ["B", "G"], "aliases": ["golgari", "BG", "GB", "black green", "green black"] },
+    "boros": { "colors": ["R", "W"], "aliases": ["boros", "RW", "WR", "red white", "white red"] },
+    "simic": { "colors": ["G", "U"], "aliases": ["simic", "GU", "UG", "green blue", "blue green"] }
+  },
+  "shards": {
+    "bant": { "colors": ["G", "W", "U"], "aliases": ["bant", "GWU", "WUG", "green white blue"] },
+    "esper": { "colors": ["W", "U", "B"], "aliases": ["esper", "WUB", "white blue black"] },
+    "grixis": { "colors": ["U", "B", "R"], "aliases": ["grixis", "UBR", "blue black red"] },
+    "jund": { "colors": ["B", "R", "G"], "aliases": ["jund", "BRG", "black red green"] },
+    "naya": { "colors": ["R", "G", "W"], "aliases": ["naya", "RGW", "red green white"] }
+  },
+  "wedges": {
+    "mardu": { "colors": ["R", "W", "B"], "aliases": ["mardu", "RWB", "red white black"] },
+    "temur": { "colors": ["G", "U", "R"], "aliases": ["temur", "GUR", "green blue red"] },
+    "abzan": { "colors": ["W", "B", "G"], "aliases": ["abzan", "WBG", "white black green"] },
+    "jeskai": { "colors": ["U", "R", "W"], "aliases": ["jeskai", "URW", "blue red white"] },
+    "sultai": { "colors": ["B", "G", "U"], "aliases": ["sultai", "BGU", "black green blue"] }
+  },
+  "four_color": {
+    "artifice": { "colors": ["W", "U", "B", "R"], "aliases": ["artifice", "WUBR", "non-green", "sans green"] },
+    "chaos": { "colors": ["U", "B", "R", "G"], "aliases": ["chaos", "UBRG", "non-white", "sans white"] },
+    "aggression": { "colors": ["B", "R", "G", "W"], "aliases": ["aggression", "BRGW", "non-blue", "sans blue"] },
+    "altruism": { "colors": ["R", "G", "W", "U"], "aliases": ["altruism", "RGWU", "non-black", "sans black"] },
+    "growth": { "colors": ["G", "W", "U", "B"], "aliases": ["growth", "GWUB", "non-red", "sans red"] }
+  },
+  "five_color": {
+    "five color": { "colors": ["W", "U", "B", "R", "G"], "aliases": ["five color", "5c", "WUBRG", "all colors", "rainbow"] }
+  }
+}

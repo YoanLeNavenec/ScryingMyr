@@ -1,4 +1,6 @@
 const banlists = require('../data/banlists.json');
+const lookupFormat = format === 'cedh' ? 'commander' : format;
+const formatData = banlists[lookupFormat];
 
 function isBanned(cardName, format, category = 'banned') {
   const formatData = banlists[format];

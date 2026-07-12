@@ -1,4 +1,6 @@
 :root {
+    --font-body: 'Nunito', sans-serif;
+    --font-heading: 'Cinzel', serif;
     --background: #c8bfba;
     --foreground: #281515;
     --card: #e8e2df;

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles/variables.css">
     <link rel="stylesheet" href="styles/layout.css">
     <link rel="stylesheet" href="styles/chat.css">
+    <link rel="stylesheet" href="styles/history.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -33,11 +34,15 @@
             <button class="chat-send-button"><i data-lucide="send"></i></button>
           </div>
         </div>
-        <div class="history-view view">
+        <div class="history-view view hidden">
+          <div class="history-empty">
+            <p>No conversations yet.</p>
+            <p>Start asking me questions to see your history here!</p>
+          </div>
         </div>
-        <div class="deckbuilding-view view">
+        <div class="deckbuilding-view view hidden">
         </div>
-        <div class="export-import-view view">
+        <div class="export-import-view view hidden">
         </div>
       </main>
     </div>

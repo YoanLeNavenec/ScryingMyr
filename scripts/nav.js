@@ -12,8 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
           
           // Switch views
           const allViews = document.querySelectorAll('.view')
-          allViews.forEach(view => view.classList.add('hidden'))
+          allViews.forEach(view => {
+            view.classList.add('hidden')
+            view.classList.remove('active-view')
+          });
           targetView.classList.remove('hidden')
+          targetView.classList.add('active-view')
       })
   });
 

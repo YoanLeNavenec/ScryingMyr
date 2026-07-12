@@ -108,9 +108,14 @@ ul {
 
 .app-main {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   flex: 1;
   height: 100%;
   padding: 1rem;
   background-color: var(--background);
+}
+
+.app-main.empty-state {
+  align-items: center;
+  justify-content: center;
 }

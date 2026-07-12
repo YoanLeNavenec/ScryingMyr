@@ -14,3 +14,8 @@
   color: var(--muted-foreground);
   gap: 0.5rem;
 }
+
+.history-empty p:first-child{
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+}

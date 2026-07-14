@@ -6,43 +6,51 @@ const chatView = document.querySelector('.chat-view');
 let currentCoversationId = null;
 
 //New conversation on load
-window.electronAPI.listConversations().then(conversations => {
+(async () => {
+    const conversations = await window.electronAPI.listConversations()
+    
     if (conversations.length > 0) {
-        // Show the modal
         document.getElementById('resume-modal').classList.remove('hidden')
         
-        document.getElementById('resume-btn').addEventListener('click', () => {
+        document.getElementById('resume-btn').addEventListener('click', async () => {
             document.getElementById('resume-modal').classList.add('hidden')
             currentConversationId = conversations[0].replace('.json', '')
-            window.electronAPI.loadConversation(currentConversationId).then(messages => {
-                messages.forEach(msg => {
-                    if (msg.role === 'user') {
-                        const el = document.createElement('div')
-                        el.classList.add('chat-message')
-                        el.textContent = msg.text
-                        chatHistory.appendChild(el)
-                    } else {
-                        addBotMessage(msg.text)
-                    }
-                })
+            const messages = await window.electronAPI.loadConversation(currentConversationId)
+            messages.forEach(msg => {
+                if (msg.role === 'user') {
+                    const el = document.createElement('div')
+                    el.classList.add('chat-message')
+                    el.textContent = msg.text
+                    chatHistory.appendChild(el)
+                } else {
+                    addBotMessage(msg.text)
+                }
             })
         })
         
-        document.getElementById('fresh-btn').addEventListener('click', () => {
+        document.getElementById('fresh-btn').addEventListener('click', async () => {
             document.getElementById('resume-modal').classList.add('hidden')
-            window.electronAPI.newConversation().then(id => {
-                currentConversationId = id
-                addBotMessage("Hello! I'm Scrying Myr! My master appointed me as your new assistant! What are we learning today?")
-            })
+            currentConversationId = await window.electronAPI.newConversation()
+            const isFirstLaunch = await window.electronAPI.checkFirstLaunch()
+            if (isFirstLaunch) {
+                addBotMessage("By Urza, hello! I'm the Scrying Myr, your appointed assistant in all things Magic the Gathering! From creating a deck to optimising it, I'm your myr! What are we tackling first?")
+            } else {
+                addBotMessage("Welcome back! What are we working on today?")
+            }
         })
+        
     } else {
-        // No conversations exist, start fresh silently
-        window.electronAPI.newConversation().then(id => {
-            currentConversationId = id
-            addBotMessage("Hello! I'm Scrying Myr! My master appointed me as your new assistant! What are we learning today?")
-        })
+        currentConversationId = await window.electronAPI.newConversation()
+        const isFirstLaunch = await window.electronAPI.checkFirstLaunch()
+        if (isFirstLaunch) {
+            addBotMessage("By Urza, hello! I'm the Scrying Myr, your appointed assistant in all things Magic the Gathering! From creating a deck to optimising it, I'm your myr! What are we tackling first?")
+        } else {
+            addBotMessage("Welcome back! What are we working on today?")
+        }
     }
-});
+})()
+
+
 
 // Send user input as a message
 SendButton.addEventListener('click', () => {

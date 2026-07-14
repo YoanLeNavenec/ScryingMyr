@@ -52,6 +52,16 @@ function createWindow() {
         .sort()
         .reverse()
     })
+
+    ipcMain.handle('check-first-launch', () => {
+      const filePath = path.join(userDataPath, 'userdata.json')
+      if (!fs.existsSync(filePath)){
+        fs.writeFileSync(filePath, JSON.stringify({onboarding_complete: false}))
+        return true
+      } else {
+        return false
+      }
+    })
 });
   
   app.on('window-all-closed', () => {

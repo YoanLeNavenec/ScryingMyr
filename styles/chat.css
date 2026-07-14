@@ -78,3 +78,12 @@
   padding: 0.75rem 1rem;
   max-width: 70%;
 }
+
+.chat-message-bot{
+  align-self: flex-start;
+  background: var(--muted);
+  color: var(--foreground);
+  border-radius: 1rem;
+  padding: 0.75rem 1rem;
+  max-width: 70%;
+}

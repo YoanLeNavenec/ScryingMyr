@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="styles/layout.css">
     <link rel="stylesheet" href="styles/chat.css">
     <link rel="stylesheet" href="styles/history.css">
+    <link rel="stylesheet" href="styles/modal.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -56,6 +57,16 @@
           </div>
         </div>
       </main>
+    </div>
+    <div class="modal hidden" id="resume-modal">
+      <div class="modal-content">
+        <p class="modal-title">Welcome back!</p>
+        <p>We were having an ongoing conversation! Would you like to pick up where we stopped?</p>
+        <div class="modal-buttons">
+          <button id="resume-btn">Resume</button>
+          <button id="fresh-btn">Start new chat</button>
+        </div>
+      </div>
     </div>
     <script>lucide.createIcons();</script>
     <script src="scripts/chat.js"></script>

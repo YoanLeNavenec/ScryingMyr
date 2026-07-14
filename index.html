@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="styles/chat.css">
     <link rel="stylesheet" href="styles/history.css">
     <link rel="stylesheet" href="styles/modal.css">
+    <link rel="stylesheet" href="styles/ImportExport.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -29,6 +30,7 @@
           <button class="dark-light" aria-label="switch light/dark mode"><i data-lucide="sun-moon"><span>Light/Dark mode</span></i></button>
         </div>
       </nav>
+
       <main class="app-main">
         <div class="chat-view view active-view">
           <div class="chat-history">
@@ -38,26 +40,47 @@
             <button class="chat-send-button"><i data-lucide="send"></i></button>
           </div>
         </div>
+
         <div class="history-view view hidden">
           <div class="history-empty">
             <p>No conversations yet.</p>
             <p>Start asking me questions to see your history here!</p>
           </div>
         </div>
+
         <div class="deckbuilding-view view hidden">
           <div class="view-empty">
             <p>In what format are we building today?</p>
             <p>Ask me directly or choose one above!</p>
           </div>
         </div>
+
         <div class="export-import-view view hidden">
-          <div class="view-empty">
-            <p>No deck loaded yet!</p>
-            <p>Build a deck first, or maybe import one!</p>
-          </div>
+        <div class="import-section">
+        <h2>Import a Deck</h2>
+        <p>Paste your decklist from Moxfield, Archidekt, or Manabox below.</p>
+        <select class="format-selector">
+            <option value="commander">Commander / cEDH</option>
+            <option value="duelcommander">Duel Commander</option>
+        </select>
+        <textarea class="import-input" placeholder="Paste your decklist here..."></textarea>
+        <button class="import-btn">Import</button>
+    </div>
+    <hr class="section-divider">
+    <div class="export-section">
+        <h2>Export Current Deck</h2>
+        <p>Export your current deck to paste into another site.</p>
+        <div class="export-buttons">
+            <button class="export-btn" data-target="moxfield">Export for Moxfield</button>
+            <button class="export-btn" data-target="archidekt">Export for Archidekt</button>
+            <button class="export-btn" data-target="manabox">Export for Manabox</button>
         </div>
+        <textarea class="export-output" placeholder="Your exported deck will appear here..." readonly></textarea>
+    </div>
+</div>
       </main>
     </div>
+
     <div class="modal hidden" id="resume-modal">
       <div class="modal-content">
         <p class="modal-title">Welcome back!</p>
@@ -68,9 +91,11 @@
         </div>
       </div>
     </div>
+
     <script>lucide.createIcons();</script>
     <script src="scripts/chat.js"></script>
     <script src="scripts/theme.js"></script>
     <script src="scripts/nav.js"></script>
+    <script src="scripts/importExport.js"></script>
 </body>
 </html>

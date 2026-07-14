@@ -3,10 +3,15 @@ const SendButton = document.querySelector('.chat-send-button');
 const chatHistory = document.querySelector('.chat-history');
 const chatView = document.querySelector('.chat-view');
 
-let currentCoversationId = null;
+let currentConversationId = null;
 
 //New conversation on load
 (async () => {
+    // Set initial empty state
+    if (chatHistory.children.length === 0) {
+        chatView.classList.add('empty-state');
+    }
+
     const conversations = await window.electronAPI.listConversations()
     
     if (conversations.length > 0) {
@@ -33,9 +38,9 @@ let currentCoversationId = null;
             currentConversationId = await window.electronAPI.newConversation()
             const isFirstLaunch = await window.electronAPI.checkFirstLaunch()
             if (isFirstLaunch) {
-                addBotMessage("By Urza, hello! I'm the Scrying Myr, your appointed assistant in all things Magic the Gathering! From creating a deck to optimising it, I'm your myr! What are we tackling first?")
+                addBotMessage("By Memnarch, hello! I'm the Scrying Myr, your appointed assistant in all things Magic the Gathering! From creating a deck to optimising it, I'm your myr! What are we tackling first?", false)
             } else {
-                addBotMessage("Welcome back! What are we working on today?")
+                addBotMessage("Welcome back! What are we working on today?", false)
             }
         })
         
@@ -43,14 +48,12 @@ let currentCoversationId = null;
         currentConversationId = await window.electronAPI.newConversation()
         const isFirstLaunch = await window.electronAPI.checkFirstLaunch()
         if (isFirstLaunch) {
-            addBotMessage("By Urza, hello! I'm the Scrying Myr, your appointed assistant in all things Magic the Gathering! From creating a deck to optimising it, I'm your myr! What are we tackling first?")
+            addBotMessage("By Memnarch, hello! I'm the Scrying Myr, your appointed assistant in all things Magic the Gathering! From creating a deck to optimising it, I'm your myr! What are we tackling first?", false)
         } else {
-            addBotMessage("Welcome back! What are we working on today?")
+            addBotMessage("Welcome back! What are we working on today?", false)
         }
     }
 })()
-
-
 
 // Send user input as a message
 SendButton.addEventListener('click', () => {
@@ -62,7 +65,7 @@ SendButton.addEventListener('click', () => {
     messageEl.textContent = message;
     chatHistory.appendChild(messageEl);
 
-    window.electronAPI.saveMessage(currentCoversationId, {
+    window.electronAPI.saveMessage(currentConversationId, {
         role: 'user',
         text: message
     });
@@ -81,21 +84,16 @@ chatInput.addEventListener('keydown', e => {
     }
 });
 
-// Set initial empty state
-console.log('chat history children:', chatHistory.children.length);
-if (chatHistory.children.length === 0) {
-    chatView.classList.add('empty-state');
-    console.log('added empty-state class');
-}
-
 //Bot's response as a message
-function addBotMessage(text){
+function addBotMessage(text, save = true) {
     const messageBot = document.createElement('div');
     messageBot.classList.add('chat-message-bot');
     messageBot.textContent = text;
-    chatHistory.appendChild(messageBot);
-    window.electronAPI.saveMessage(currentCoversationId, {
-        role: 'bot',
-        text: text
-    })
+    chatHistory.appendChild(messageBot)
+    if (save && currentConversationId) {
+        window.electronAPI.saveMessage(currentConversationId, {
+            role: 'bot',
+            text: text
+        })
+    }
 }

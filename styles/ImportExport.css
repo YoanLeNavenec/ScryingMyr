@@ -1,0 +1,85 @@
+.export-import-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    overflow-y: auto;
+    gap: 1.5rem;
+}
+
+.import-section,
+.export-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.import-section h2,
+.export-section h2 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    color: var(--foreground);
+}
+
+.import-section p,
+.export-section p {
+    color: var(--muted-foreground);
+    font-size: 0.9rem;
+}
+
+.format-selector {
+    background: var(--input);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    width: fit-content;
+}
+
+.import-input,
+.export-output {
+    background: var(--input);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    height: 200px;
+    resize: none;
+    font-family: var(--font-body);
+}
+
+.import-btn {
+    background: var(--highlight);
+    color: var(--accent-foreground);
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.export-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.export-btn {
+    background: var(--muted);
+    color: var(--foreground);
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.export-btn:hover,
+.import-btn:hover {
+    background: var(--highlight);
+    color: var(--accent-foreground);
+}
+
+.section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+}

@@ -1,0 +1,131 @@
+.deckbuilding-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.deck-topbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    min-height: 48px;
+}
+
+.deck-topbar select {
+    background: var(--input);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    padding: 0.4rem 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+}
+
+.deck-commander {
+    color: var(--muted-foreground);
+    font-size: 0.95rem;
+    padding: 0.4rem 0.75rem;
+    background: var(--input);
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    flex: 1;
+}
+
+.deck-add-btn {
+    background: var(--highlight);
+    color: var(--accent-foreground);
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.deck-main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    gap: 0;
+}
+
+.deck-grid {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.deck-chat {
+    width: 280px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--border);
+    background: var(--card);
+}
+
+.deck-chat-header {
+    padding: 0.75rem 1rem;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--foreground);
+}
+
+.deck-chat-history {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.deck-chat-input-area {
+    display: flex;
+    padding: 0.75rem;
+    gap: 0.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.deck-chat-input {
+    flex: 1;
+    background: var(--input);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    padding: 0.4rem 0.5rem;
+    resize: none;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    height: 60px;
+}
+
+.deck-chat-send {
+    background: var(--highlight);
+    color: var(--accent-foreground);
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.deck-statsbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    font-size: 1rem;
+    color: var(--muted-foreground);
+    flex-shrink: 0;
+    min-height: 44px;
+}

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="styles/history.css">
     <link rel="stylesheet" href="styles/modal.css">
     <link rel="stylesheet" href="styles/ImportExport.css">
+    <link rel="stylesheet" href="styles/deckbuilder.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -49,11 +50,54 @@
         </div>
 
         <div class="deckbuilding-view view hidden">
-          <div class="view-empty">
-            <p>In what format are we building today?</p>
-            <p>Ask me directly or choose one above!</p>
-          </div>
+    <!-- Top bar -->
+    <div class="deck-topbar">
+        <select class="deck-format-selector">
+            <option value="commander">EDH / cEDH</option>
+            <option value="duelcommander">Duel Commander</option>
+        </select>
+        <div class="deck-commander">Commander: None</div>
+        <select class="deck-sort">
+            <option value="type">Sort: Type</option>
+            <option value="cmc">Sort: CMC</option>
+            <option value="color">Sort: Color</option>
+            <option value="name">Sort: Name</option>
+        </select>
+        <select class="deck-group">
+            <option value="type">Group: Type</option>
+            <option value="cmc">Group: CMC</option>
+            <option value="color">Group: Color</option>
+        </select>
+        <button class="deck-add-btn">+ Add a card</button>
+    </div>
+
+    <!-- Main area -->
+    <div class="deck-main">
+        <!-- Card grid -->
+        <div class="deck-grid"></div>
+
+        <!-- Docked chat -->
+        <div class="deck-chat">
+            <div class="deck-chat-header">Chat</div>
+            <div class="deck-chat-history"></div>
+            <div class="deck-chat-input-area">
+                <textarea class="deck-chat-input" placeholder="Ask Scrying Myr..."></textarea>
+                <button class="deck-chat-send"><i data-lucide="send"></i></button>
+            </div>
         </div>
+    </div>
+
+    <!-- Bottom stats bar -->
+    <div class="deck-statsbar">
+        <span class="deck-count">0 / 100 cards</span>
+        <span class="deck-separator">·</span>
+        <span class="deck-colors">W: 0 · U: 0 · B: 0 · R: 0 · G: 0</span>
+        <span class="deck-separator">·</span>
+        <span class="deck-bracket">Bracket: —</span>
+        <span class="deck-separator">·</span>
+        <span class="deck-avgcmc">Avg CMC: —</span>
+    </div>
+  </div>
 
         <div class="export-import-view view hidden">
         <div class="import-section">

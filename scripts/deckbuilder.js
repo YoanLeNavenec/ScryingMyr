@@ -20,7 +20,61 @@ function renderGridView(){
     if (!acc[group]) acc[group] = []
     acc[group].push(card)
     return acc
-  }, {}) 
+  }, {})
+  Object.entries(groups).forEach(([groupName, cards]) => {
+    const section = document.createElement('div')
+    section.classList.add('deck-section')
+
+    const header = document.createElement('p')
+    header.classList.add('deck-section-header')
+    header.textContent = '${groupName} (${cards.length})'
+    section.appendChild(header)
+
+    const cardGrid = document.createElement('div')
+    cardGrid.classList.add('deck-card-grid')
+
+    cards.forEach(card => {
+      const cardEl = document.createElement('div')
+      cardEl.classList.add('deck-card')
+      
+      const cardTop = document.createElement('div')
+      cardTop.classList.add('deck-card-top')
+
+      const cardName = document.createElement('p')
+      cardName.classList.add('deck-card-name')
+      cardName.textContent = card.cardName
+      
+      const cardMana = document.createElement('p')
+      cardMana.classList.add('deck-card-mana')
+      cardMana.textContent = card.manaCost || ''
+
+      cardTop.appendChild(cardName)
+      cardTop.appendChild(cardMana)
+
+      const cardType = document.createElement('p')
+      cardMana.classList.add('deck-card-type')
+      cardType.textContent = card.type || ''
+
+      const cardText = document.createElement('p')
+      cardText.classList.add('deck-card-text')
+      cardText.textContent = card.text || ''
+
+      const cardPT = document.createElement('p')
+      cardPT.classList.add('deck-card-pt')
+      if (card.power && card.toughness) {
+        cardPT.textContent = `${card.power}/${card.toughness}`
+      }
+
+      cardEl.appendChild(cardTop)
+      cardEl.appendChild(cardType)
+      cardEl.appendChild(cardText)
+      cardEl.appendChild(cardPT)
+      cardGrid.appendChild(cardEl)
+    })
+    
+    section.appendChild(cardGrid)
+    deckGrid.appendChild(section)
+  })
 }
 
 function renderListView(){

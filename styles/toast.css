@@ -1,0 +1,20 @@
+div#toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    max-width: 300px;
+    background: var(--card);
+    border: 1px solid var(--highlight);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    color: var(--foreground);
+    font-size: 0.9rem;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+div#toast.hidden {
+    opacity: 0;
+    pointer-events: none;
+}

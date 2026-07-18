@@ -6,14 +6,21 @@ const exportBtns = document.querySelectorAll('.export-btn')
 
 window.currentDeck = []
 
-importBtn.addEventListener('click', function(){
+importBtn.addEventListener('click', async function(){
   const text = importInput.value 
   const format = formatSelect.value 
   const result = window.electronAPI.importDeck(text, format)
-  if (result && result.length > 0) {
-    window.currentDeck = result
-  }
   console.log(result)
+  if (result && result.length > 0){
+    const enriched = await Promise.all(result.map(async card => {
+      const fullCard = await window.electronAPI.lookupCard(card.name)
+      return fullCard ? {...fullCard, quantity: card.quantity, isCommander: card.isCommander} : card
+    }))
+    window.currentDeck = enriched
+    window.dispatchEvent(new CustomEvent('deck-updated'))
+    showToast('Deck imported! Check the deckbuilder tab.')
+  }
+
 })
 
 exportBtns.forEach(btn => {

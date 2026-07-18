@@ -2,6 +2,7 @@ const deckGrid = document.querySelector('.deck-grid')
 const viewSelect = document.querySelector('.deck-view-select')
 
 function getTypeGroup(card) {
+  if (card.isCommander) return 'Commander'
   const type = card.type || ''
   if (type.includes('Creature')) return 'Creatures'
   if (type.includes('Planeswalker')) return 'Planeswalkers'
@@ -27,7 +28,7 @@ function renderGridView(){
 
     const header = document.createElement('p')
     header.classList.add('deck-section-header')
-    header.textContent = '${groupName} (${cards.length})'
+    header.textContent = `${groupName} (${cards.length})`
     section.appendChild(header)
 
     const cardGrid = document.createElement('div')
@@ -42,7 +43,7 @@ function renderGridView(){
 
       const cardName = document.createElement('p')
       cardName.classList.add('deck-card-name')
-      cardName.textContent = card.cardName
+      cardName.textContent = card.name
       
       const cardMana = document.createElement('p')
       cardMana.classList.add('deck-card-mana')

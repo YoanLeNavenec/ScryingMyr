@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const fs = require('fs')
 const path = require ('path')
+let CleanCardsCache = null
 
 function createWindow() {
   // Create the browser window.
@@ -64,6 +65,16 @@ function createWindow() {
       } else {
         return false
       }
+    })
+
+    ipcMain.handle('lookup-card', (event, cardName) => {
+      const cleanCardPath = path.join(__dirname, 'data', 'cleanCards.json')
+      if(!fs.existsSync(cleanCardPath)) return null
+      
+      if (!CleanCardsCache) {
+        CleanCardsCache = JSON.parse(fs.readFileSync(cleanCardPath, 'utf8'))
+      }
+      return CleanCardsCache.find(c => c.name.toLowerCase() === cardName.toLowerCase()) || null
     })
 });
   

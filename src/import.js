@@ -14,9 +14,9 @@ function importDeckList(text, format) {
 const deck = lines.map(line => {
 
   const cleanLine = line.replace(/(\d+)x/, '$1');
-  const parts = cleanLine.split(' ', 2);
+  const parts = cleanLine.split(' ');
   const quantity = parseInt(parts[0]);
-  const rawName = parts[1];
+  const rawName = parts.slice(1).join(' ');
 
   const hasCommander = ['commander', 'duelcommander', 'cedh'].includes(format);
   const isCommander = hasCommander && rawName.includes('*CMDR*');

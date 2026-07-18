@@ -74,8 +74,17 @@ function createWindow() {
       if (!CleanCardsCache) {
         CleanCardsCache = JSON.parse(fs.readFileSync(cleanCardPath, 'utf8'))
       }
-      return CleanCardsCache.find(c => c.name.toLowerCase() === cardName.toLowerCase()) || null
-    })
+
+      const lower = cardName.toLowerCase()
+      return CleanCardsCache.find(c => {
+        if(!c.name) return false
+        const cardLower = c.name.toLowerCase()
+        //exact name matching
+        if (cardLower === lower) return true
+        //front face name match for double faced cards
+        if (cardLower.startsWith(lower + ' //')) return true
+      }) || null
+    }) 
 });
   
   app.on('window-all-closed', () => {

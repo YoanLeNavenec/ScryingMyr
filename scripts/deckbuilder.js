@@ -46,7 +46,12 @@ function renderGridView() {
         return acc
     }, {})
 
-    Object.entries(groups).forEach(([groupName, cards]) => {
+    const groupOrder = ['Commander', 'Planeswalkers', 'Creatures', 'Sorceries', 'Instants', 'Artifacts', 'Enchantments', 'Battles', 'Lands', 'Other']
+    const sortedGroups = Object.entries(groups).sort(([a], [b]) => {
+      return groupOrder.indexOf(a) - groupOrder.indexOf(b)
+    })
+
+    sortedGroups.forEach(([groupName, cards]) => {
         const section = document.createElement('div')
         section.classList.add('deck-section')
 
@@ -145,7 +150,7 @@ function updateStatsBar(){
   }, 0)
   const colorCounts = window.currentDeck.reduce((acc, card) => {
     const qty = card.quantity || 1
-    if (card.colorIdentity && card.colorIdentity.length === 0) {
+    if (!card.colorIdentity || card.colorIdentity.length === 0) {
       acc.C += qty
     } else {
       card.colorIdentity.forEach(color => {

@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const fs = require('fs')
 const path = require ('path')
-let CleanCardsCache = null
+let cleanCardsCache = null
 
 function createWindow() {
   // Create the browser window.
@@ -67,24 +67,28 @@ function createWindow() {
       }
     })
 
-    ipcMain.handle('lookup-card', (event, cardName) => {
-      const cleanCardPath = path.join(__dirname, 'data', 'cleanCards.json')
-      if(!fs.existsSync(cleanCardPath)) return null
-      
-      if (!CleanCardsCache) {
-        CleanCardsCache = JSON.parse(fs.readFileSync(cleanCardPath, 'utf8'))
-      }
+ipcMain.handle('lookup-card', (event, cardName) => {
+    const cleanCardsPath = path.join(__dirname, 'data', 'cleanCards.json')
+    if (!fs.existsSync(cleanCardsPath)) return null
 
-      const lower = cardName.toLowerCase()
-      return CleanCardsCache.find(c => {
-        if(!c.name) return false
-        const cardLower = c.name.toLowerCase()
-        //exact name matching
-        if (cardLower === lower) return true
-        //front face name match for double faced cards
-        if (cardLower.startsWith(lower + ' //')) return true
-      }) || null
-    }) 
+    if (!cleanCardsCache) {
+        cleanCardsCache = JSON.parse(fs.readFileSync(cleanCardsPath, 'utf8'))
+    }
+
+    const normalize = name => name.toLowerCase()
+    .replace(/\s*\/\/?\s*/g, '/')
+    .replace(/_+/g, '_')
+    const normalizedInput = normalize(cardName)
+
+    return cleanCardsCache.find(c => {
+        if (!c.name) return false
+        // exact match
+        if (normalize(c.name) === normalizedInput) return true
+        // front face match for double-faced/adventure cards
+        if (normalize(c.name).startsWith(normalizedInput + '/')) return true
+        return false
+    }) || null
+})
 });
   
   app.on('window-all-closed', () => {

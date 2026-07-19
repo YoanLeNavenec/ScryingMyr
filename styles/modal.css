@@ -51,3 +51,25 @@
   background: var(--muted);
   color: var(--foreground);
 }
+
+.commander-list{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 0.5rem 0;
+}
+
+.commander-option {
+  padding: 0.5rem 0.75rem;
+  background: var(--muted);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  color: var(--foreground);
+}
+
+.commander-option:hover{
+  background: var(--highlight);
+  color: var(--accent-foreground)
+}

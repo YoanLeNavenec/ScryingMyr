@@ -20,7 +20,6 @@ importBtn.addEventListener('click', async function(){
     window.dispatchEvent(new CustomEvent('deck-updated'))
     showToast('Deck imported! Check the deckbuilder tab.')
   }
-
 })
 
 exportBtns.forEach(btn => {

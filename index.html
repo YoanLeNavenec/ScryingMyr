@@ -140,9 +140,20 @@
         </div>
       </div>
     </div>
-
+    <!--Small popup to signal successful import to user-->
     <div id="toast" class="toast hidden">
       <p id="toast-message"></p>
+    </div>
+    <!--Menu to select commander for deck on import-->
+    <div class="modal hidden" id="commander-modal">
+      <div class="modal-content">
+        <p class="modal-title">Who's your commander?</p>
+        <p>I sadly couldn't recognize your commander. Can you tell me who it is?</p>
+        <div id="commander-list" class="commander-list"></div>
+        <div class="modal-buttons">
+          <button id="commander-skip-btn">Skip for now</button>
+        </div>
+      </div>
     </div>
     <script>lucide.createIcons();</script>
     <script src="scripts/utils.js"></script>

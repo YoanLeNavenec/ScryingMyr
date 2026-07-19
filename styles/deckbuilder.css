@@ -205,6 +205,22 @@
     padding-top: 0.25rem;
 }
 
+.deck-card-quantity{
+    background: var(--highlight);
+    color: var(--accent-foreground);
+    border-radius: 0.25rem;
+    padding: 0.1rem 0.3rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
+    align-self: flex-start;
+}
+
+.deck-card-quantity--warning{
+    background: var(--destructive);
+    color: var(--destructive-foreground);
+}
+
 .deck-empty {
     color: var(--muted-foreground);
     text-align: center;

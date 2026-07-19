@@ -18,6 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
           });
           targetView.classList.remove('hidden')
           targetView.classList.add('active-view')
+
+          if (navButton.dataset.view === 'deckbuilding-view'){
+            window.dispatchEvent(new CustomEvent('deckbuilder-opened'))
+          }
       })
   });
 

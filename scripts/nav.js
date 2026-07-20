@@ -30,11 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const navButtons = navList.querySelectorAll('button')
 
   navList.addEventListener('keydown', e => {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      const currentIndex = Array.from(navButtons).indexOf(document.activeElement);
-      const nextIndex = (currentIndex + (e.key === 'ArrowDown' ? 1 : -1) + navButtons.length) % navButtons.length;
-      navButtons[nextIndex].focus();
-    };
+    if (document.activeElement.tagName === 'INPUT' ||
+        document.activeElement.tagName === 'TEXTAREA') return
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      console.log('current:', current)
+      console.log('results:', results.length)
+      if (!current) {
+          results[0]?.classList.add('focused')
+        } else {
+          const next = current.nextElementSibling
+          console.log('next:', next)
+          current.classList.remove('focused')
+          if (next) next.classList.add('focused')
+          else results[0]?.classList.add('focused')
+        }
+    } 
   });
 });

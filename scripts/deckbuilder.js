@@ -52,27 +52,90 @@ document.getElementById('add-card-cancel-btn').addEventListener('click', () => {
   addCardModal.classList.add('hidden')
 })
 
-cardSearchInput.addEventListener('keyup', async () => {
-  const query = cardSearchInput.value.trim()
-  if (query.length < 2){
+// Search as you type
+cardSearchInput.addEventListener('keyup', async (e) => {
+  if (['ArrowDown', 'ArrowUp', 'Enter'].includes(e.key)) return
+
+    const query = cardSearchInput.value.trim()
+    if (query.length < 2) {
+        cardSearchResults.innerHTML = ''
+        return
+    }
+
+    const results = await window.electronAPI.searchCards(query)
     cardSearchResults.innerHTML = ''
-    return
-  }
 
-  const results = await window.electronAPI.searchCards(query)
-  cardSearchResults.innerHTML = ''
-
-  results.forEach(card => {
-    const result = document.createElement('div')
-    result.classList.add('card-search-result')
-    result.textContent = `${card.name} - ${card.type || ''}`
-    result.addEventListener('click', () => {
-      addCardToDecklist(card)
-      addCardModal.classList.add('hidden')
+    results.forEach(card => {
+        const result = document.createElement('div')
+        result.classList.add('card-search-result')
+        result.textContent = `${card.name} — ${card.type || ''}`
+        result.addEventListener('click', () => {
+            addCardToDecklist(card)
+            addCardModal.classList.add('hidden')
+        })
+        cardSearchResults.appendChild(result)
     })
-    cardSearchResults.appendChild(result)
-  })
 })
+
+// Arrow key navigation + Enter to select
+cardSearchInput.addEventListener('keydown', e => {
+    const results = cardSearchResults.querySelectorAll('.card-search-result')
+    const current = cardSearchResults.querySelector('.card-search-result.focused')
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        if (!current) {
+            results[0]?.classList.add('focused')
+        } else {
+            const next = current.nextElementSibling
+            current.classList.remove('focused')
+            if (next) next.classList.add('focused')
+            else results[0]?.classList.add('focused')
+        }
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        if (current) {
+            const prev = current.previousElementSibling
+            current.classList.remove('focused')
+            if (prev) prev.classList.add('focused')
+            else results[results.length - 1]?.classList.add('focused')
+        }
+    } else if (e.key === 'Enter') {
+        if (current) current.click()
+    }
+
+    if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    if (!current) {
+        results[0]?.classList.add('focused')
+        results[0]?.scrollIntoView({ block: 'nearest' })
+    } else {
+        const next = current.nextElementSibling
+        current.classList.remove('focused')
+        if (next) {
+            next.classList.add('focused')
+            next.scrollIntoView({ block: 'nearest' })
+        } else {
+            results[0]?.classList.add('focused')
+            results[0]?.scrollIntoView({ block: 'nearest' })
+        }
+    }
+} else if (e.key === 'ArrowUp') {
+    e.preventDefault()
+    if (current) {
+        const prev = current.previousElementSibling
+        current.classList.remove('focused')
+        if (prev) {
+            prev.classList.add('focused')
+            prev.scrollIntoView({ block: 'nearest' })
+        } else {
+            results[results.length - 1]?.classList.add('focused')
+            results[results.length - 1]?.scrollIntoView({ block: 'nearest' })
+        }
+    }
+}
+})
+
 
 function addCardToDecklist(card){
   const existing = window.currentDeck.find(c => c.name === card.name)
@@ -242,6 +305,7 @@ function showCommanderPicker(deck) {
     })
 
     document.getElementById('commander-modal').classList.remove('hidden')
+    commanderList.focus()
 }
 
 document.getElementById('commander-skip-btn').addEventListener('click', () => {
@@ -260,4 +324,49 @@ window.addEventListener('deckbuilder-opened', () => {
   if (window.currentDeck && window.currentDeck.length > 0) {
     showCommanderPicker(window.currentDeck)
   }
+})
+
+document.addEventListener('keydown', e =>{
+  if (e.key === 'Escape') {
+    addCardModal.classList.add('hidden')
+    document.getElementById('commander-modal').classList.add('hidden')
+  }
+})
+
+document.getElementById('commander-list').addEventListener('keydown', e => {
+    const options = document.querySelectorAll('.commander-option')
+    const current = document.querySelector('.commander-option.focused')
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        if (!current) {
+            options[0]?.classList.add('focused')
+            options[0]?.scrollIntoView({ block: 'nearest' })
+        } else {
+            const next = current.nextElementSibling
+            current.classList.remove('focused')
+            if (next) {
+                next.classList.add('focused')
+                next.scrollIntoView({ block: 'nearest' })
+            } else {
+                options[0]?.classList.add('focused')
+                options[0]?.scrollIntoView({ block: 'nearest' })
+            }
+        }
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        if (current) {
+            const prev = current.previousElementSibling
+            current.classList.remove('focused')
+            if (prev) {
+                prev.classList.add('focused')
+                prev.scrollIntoView({ block: 'nearest' })
+            } else {
+                options[options.length - 1]?.classList.add('focused')
+                options[options.length - 1]?.scrollIntoView({ block: 'nearest' })
+            }
+        }
+    } else if (e.key === 'Enter') {
+        if (current) current.click()
+    }
 })

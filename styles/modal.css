@@ -107,3 +107,13 @@
     background: var(--highlight);
     color: var(--accent-foreground);
 }
+
+.card-search-result.focused{
+  background: var(--highlight);
+  color: var(--accent-foreground);
+}
+
+.commander-option.focused{
+  background: var(--highlight);
+  color: var(--accent-foreground);
+}

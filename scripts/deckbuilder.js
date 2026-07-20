@@ -2,6 +2,10 @@ const deckGrid = document.querySelector('.deck-grid')
 const viewSelect = document.querySelector('.deck-view-select')
 const formatSelector = document.querySelector('.deck-format-selector')
 const singletonFormats = ['commander', 'cedh', 'duelcommander']
+const addCardBtn = document.querySelector('.deck-add-btn')
+const addCardModal = document.getElementById('add-card-modal')
+const cardSearchInput = document.getElementById('card-search-input')
+const cardSearchResults = document.getElementById('card-search-results')
 
 function getTypeGroup(card) {
     if (card.isCommander) return 'Commander'
@@ -36,6 +40,50 @@ function isDuplicateViolation(card){
     }
 
     return true
+}
+
+addCardBtn.addEventListener('click', () => {
+  addCardModal.classList.remove('hidden')
+  cardSearchInput.value = ''
+  cardSearchResults.innerHTML = ''
+  cardSearchInput.focus()
+})
+document.getElementById('add-card-cancel-btn').addEventListener('click', () => {
+  addCardModal.classList.add('hidden')
+})
+
+cardSearchInput.addEventListener('keyup', async () => {
+  const query = cardSearchInput.value.trim()
+  if (query.length < 2){
+    cardSearchResults.innerHTML = ''
+    return
+  }
+
+  const results = await window.electronAPI.searchCards(query)
+  cardSearchResults.innerHTML = ''
+
+  results.forEach(card => {
+    const result = document.createElement('div')
+    result.classList.add('card-search-result')
+    result.textContent = `${card.name} - ${card.type || ''}`
+    result.addEventListener('click', () => {
+      addCardToDecklist(card)
+      addCardModal.classList.add('hidden')
+    })
+    cardSearchResults.appendChild(result)
+  })
+})
+
+function addCardToDecklist(card){
+  const existing = window.currentDeck.find(c => c.name === card.name)
+  if (existing) {
+    existing.quantity += 1
+  } else {
+    window.currentDeck.push({...card, quantity: 1, isCommander: false})
+  }
+  window.dispatchEvent(new CustomEvent('deck-updated'))
+  updateStatsBar()
+  showToast(`${card.name} added to deck!`)
 }
 
 function renderGridView() {

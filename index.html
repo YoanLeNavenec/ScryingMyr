@@ -104,6 +104,7 @@
     </div>
   </div>
 
+<!--Import/Export tab-->
         <div class="export-import-view view hidden">
         <div class="import-section">
         <h2>Import a Deck</h2>
@@ -130,6 +131,7 @@
       </main>
     </div>
 
+    <!--Popup on launch after closing with an ongoin chat-->
     <div class="modal hidden" id="resume-modal">
       <div class="modal-content">
         <p class="modal-title">Welcome back!</p>
@@ -140,10 +142,12 @@
         </div>
       </div>
     </div>
+
     <!--Small popup to signal successful import to user-->
     <div id="toast" class="toast hidden">
       <p id="toast-message"></p>
     </div>
+
     <!--Menu to select commander for deck on import-->
     <div class="modal hidden" id="commander-modal">
       <div class="modal-content">
@@ -155,6 +159,19 @@
         </div>
       </div>
     </div>
+
+    <!--Modal search for adding cards-->
+    <div class="modal hidden" id="add-card-modal">
+      <div class="modal-content">
+        <p class="modal-title">Add a card</p>
+        <input type="text" id="card-search-input" placeholder="give me a card name to find!" class="card-search-input">
+        <div id="card-search-results" class="card-search-results"></div>
+        <div class="modal-buttons">
+          <button id="add-card-cancel-btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+
     <script>lucide.createIcons();</script>
     <script src="scripts/utils.js"></script>
     <script src="scripts/chat.js"></script>

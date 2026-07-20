@@ -90,6 +90,20 @@ ipcMain.handle('lookup-card', (event, cardName) => {
     }) || null
 })
 });
+
+ipcMain.handle('search-cards', (event, query) => {
+  const cleanCardsPath = path.join(__dirname, 'data', 'cleanCards.json')
+  if (!fs.existsSync(cleanCardsPath)) return []
+
+  if (!cleanCardsCache) {
+    cleanCardsCache = JSON.parse(fs.readFileSync(cleanCardsPath, 'utf8'))
+  }
+
+  const lower = query.toLowerCase()
+  return cleanCardsCache
+    .filter(c => c.name && c.name.toLowerCase().includes(lower))
+    .slice(0, 10)
+})
   
   app.on('window-all-closed', () => {
     app.quit();

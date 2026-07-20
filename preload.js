@@ -11,5 +11,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   checkFirstLaunch: () => ipcRenderer.invoke('check-first-launch'),
   importDeck: (text, format) => importDeckList(text, format),
   exportDeck: (deck) => exportDeckList(deck),
-  lookupCard: (cardName) => ipcRenderer.invoke('lookup-card', cardName)
+  lookupCard: (cardName) => ipcRenderer.invoke('lookup-card', cardName),
+  searchCards: (query) => ipcRenderer.invoke('search-cards', query)
 })

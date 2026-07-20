@@ -73,3 +73,37 @@
   background: var(--highlight);
   color: var(--accent-foreground)
 }
+
+.card-search-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background: var(--input);
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    color: var(--foreground);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+}
+
+.card-search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 0.5rem;
+}
+
+.card-search-result {
+    padding: 0.5rem 0.75rem;
+    background: var(--muted);
+    border-radius: 0.25rem;
+    cursor: pointer;
+    color: var(--foreground);
+    font-size: 0.9rem;
+}
+
+.card-search-result:hover {
+    background: var(--highlight);
+    color: var(--accent-foreground);
+}

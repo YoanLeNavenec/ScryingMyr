@@ -35,7 +35,7 @@ function isDuplicateViolation(card){
     const limitMatch = text.match(/up to (\w+) cards? named/i)
     if (limitMatch) {
       const wordToNum = {'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10 }
-      const limit = worldToNum[limitMatch[1].toLowerCase()] || parseInt(limitMatch[1])
+      const limit = wordToNum[limitMatch[1].toLowerCase()] || parseInt(limitMatch[1])
       if (!isNaN(limit) && card.quantity <= limit) return false
     }
 
@@ -149,8 +149,21 @@ function addCardToDecklist(card){
   showToast(`${card.name} added to deck!`)
 }
 
-function renderGridView() {
-    const groups = window.currentDeck.reduce((acc, card) => {
+function removeCardFromDecklist(card){
+    const existing = window.currentDeck.find(c => c.name === card.name)
+        if (existing){
+            existing.quantity -= 1
+            if (existing.quantity <= 0){
+                window.currentDeck = window.currentDeck.filter(c => c.name !== card.name)
+            }
+        }
+    window.dispatchEvent(new CustomEvent('deck-updated'))
+    updateStatsBar()
+    showToast(`${card.name} removed from deck!`)
+}
+
+function groupAndSortDeck(deck) {
+    const groups = deck.reduce((acc, card) => {
         const group = getTypeGroup(card)
         if (!acc[group]) acc[group] = []
         acc[group].push(card)
@@ -158,9 +171,13 @@ function renderGridView() {
     }, {})
 
     const groupOrder = ['Commander', 'Planeswalkers', 'Creatures', 'Sorceries', 'Instants', 'Artifacts', 'Enchantments', 'Battles', 'Lands', 'Other']
-    const sortedGroups = Object.entries(groups).sort(([a], [b]) => {
+    return Object.entries(groups).sort(([a], [b]) => {
       return groupOrder.indexOf(a) - groupOrder.indexOf(b)
     })
+}
+
+function renderGridView() {
+    const sortedGroups = groupAndSortDeck(window.currentDeck)
 
     sortedGroups.forEach(([groupName, cards]) => {
         const section = document.createElement('div')
@@ -217,10 +234,16 @@ function renderGridView() {
                 cardPT.textContent = `${card.power}/${card.toughness}`
             }
 
+            const cardDel = document.createElement('button')
+            cardDel.textContent = 'X'
+            cardDel.classList.add('deck-card-delete')
+            cardDel.addEventListener('click', () => removeCardFromDecklist(card))
+
             cardEl.appendChild(cardTop)
             cardEl.appendChild(cardType)
             cardEl.appendChild(cardText)
             cardEl.appendChild(cardPT)
+            cardEl.appendChild(cardDel)
             cardGrid.appendChild(cardEl)
         })
 
@@ -230,6 +253,72 @@ function renderGridView() {
 }
 
 function renderListView() {
+    const sortedGroups = groupAndSortDeck(window.currentDeck)
+
+    sortedGroups.forEach(([groupName, cards]) => {
+        const section = document.createElement('div')
+        section.classList.add('deck-section')
+
+        const header = document.createElement('p')
+        header.classList.add('deck-section-header')
+        const totalCount = cards.reduce((sum, card) => sum + (card.quantity || 1), 0)
+        header.textContent = `${groupName} (${totalCount})`
+        section.appendChild(header)
+
+        const list = document.createElement('div')
+        list.classList.add('deck-list')
+
+        cards.forEach(card => {
+            const row = document.createElement('div')
+            row.classList.add('deck-list-row')
+
+            const rowName = document.createElement('span')
+            rowName.classList.add('deck-list-name')
+            rowName.textContent = card.name
+            rowName.title = card.name
+
+            const rowMana = document.createElement('span')
+            rowMana.classList.add('deck-list-mana')
+            rowMana.textContent = card.manaCost || ''
+
+            const rowType = document.createElement('span')
+            rowType.classList.add('deck-list-type')
+            rowType.textContent = card.type || ''
+            rowType.title = card.type || ''
+
+            const rowPT = document.createElement('span')
+            rowPT.classList.add('deck-list-pt')
+            if (card.power && card.toughness) {
+                rowPT.textContent = `${card.power}/${card.toughness}`
+            }
+
+            const rowQty = document.createElement('span')
+            rowQty.classList.add('deck-list-quantity')
+            if (card.quantity > 1) {
+                if (isDuplicateViolation(card)) {
+                    rowQty.classList.add('deck-list-quantity--warning')
+                    rowQty.title = 'Warning: Only one copy per card allowed in this format!'
+                }
+                rowQty.textContent = `x${card.quantity}`
+            }
+
+            const rowDel = document.createElement('button')
+            rowDel.textContent = 'X'
+            rowDel.classList.add('deck-row-delete')
+            rowDel.addEventListener('click', () => removeCardFromDecklist(card))
+
+            row.appendChild(rowName)
+            row.appendChild(rowMana)
+            row.appendChild(rowType)
+            row.appendChild(rowPT)
+            row.appendChild(rowQty)
+            row.appendChild(rowDel)
+            list.appendChild(row)
+        })
+
+        section.appendChild(list)
+        deckGrid.appendChild(section)
+    })
 }
 
 function renderDeck() {

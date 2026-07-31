@@ -1,0 +1,12 @@
+{
+  "Gyruda, Doom of Depths": {"kind": "even-mv"},
+  "Obosh, the Preypiercer": { "kind": "odd-mv"},
+  "Keruga, the Macrosage": {"kind": "min-mv", "value": 3},
+  "Kaheera, the Orphanguard": {"kind": "subtype-list", "types":["Cat", "Elemental", "Nightmare", "Beast", "Dinosaur"] },
+  "Yorion, Sky Nomad": {"kind": "deck-size", "value": 80 },
+  "Umori, the Collector": {"kind": "shared-type"},
+  "Lutri, the Spellchaser": {"kind": "singleton"},
+  "Lurrus of the Dream-Den": {"kind": "max-mv", "value": 2},
+  "Jegantha, the Wellspring": {"kind": "no-repeated-symbol"},
+  "Zirda, the Dawnwaker": {"kind": "has-activated-ability"}
+}

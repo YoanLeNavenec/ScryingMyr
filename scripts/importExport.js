@@ -9,14 +9,21 @@ window.currentDeck = []
 importBtn.addEventListener('click', async function(){
   const text = importInput.value 
   const format = formatSelect.value 
-  const result = window.electronAPI.importDeck(text, format)
-  console.log(result)
-  if (result && result.length > 0){
-    const enriched = await Promise.all(result.map(async card => {
+  const { deck, sideboard } = window.electronAPI.importDeck(text, format)
+  console.log(deck)
+  if (deck && deck.length > 0){
+    const enriched = await Promise.all(deck.map(async card => {
       const fullCard = await window.electronAPI.lookupCard(card.name)
       return fullCard ? {...fullCard, quantity: card.quantity, isCommander: card.isCommander} : card
     }))
     window.currentDeck = enriched
+
+    const enrichedSideboard = await Promise.all(sideboard.map(async card => { 
+      const fullCard = await window.electronAPI.lookupCard(card.name)
+      return fullCard ? { ...fullCard, quantity: card.quantity} : card
+    }))
+    window.currentSideboard = enrichedSideboard
+
     window.dispatchEvent(new CustomEvent('deck-updated'))
     showToast('Deck imported! Check the deckbuilder tab.')
   }

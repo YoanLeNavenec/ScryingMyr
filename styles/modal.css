@@ -61,7 +61,7 @@
   margin: 0.5rem 0;
 }
 
-.commander-option {
+.commander-option, .companion-option {
   padding: 0.5rem 0.75rem;
   background: var(--muted);
   border-radius: 0.25rem;
@@ -69,7 +69,7 @@
   color: var(--foreground);
 }
 
-.commander-option:hover{
+.commander-option:hover, .companion-option:hover {
   background: var(--highlight);
   color: var(--accent-foreground)
 }

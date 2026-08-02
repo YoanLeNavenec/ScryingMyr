@@ -9,6 +9,7 @@ const cardSearchResults = document.getElementById('card-search-results')
 
 function getTypeGroup(card) {
     if (card.isCommander) return 'Commander'
+    if (card.isCompanion) return 'Companion'
     const type = card.type || ''
     if (type.includes('Creature')) return 'Creatures'
     if (type.includes('Planeswalker')) return 'Planeswalkers'
@@ -170,7 +171,7 @@ function groupAndSortDeck(deck) {
         return acc
     }, {})
 
-    const groupOrder = ['Commander', 'Planeswalkers', 'Creatures', 'Sorceries', 'Instants', 'Artifacts', 'Enchantments', 'Battles', 'Lands', 'Other']
+    const groupOrder = ['Commander','Companion', 'Planeswalkers', 'Creatures', 'Sorceries', 'Instants', 'Artifacts', 'Enchantments', 'Battles', 'Lands', 'Other']
     return Object.entries(groups).sort(([a], [b]) => {
       return groupOrder.indexOf(a) - groupOrder.indexOf(b)
     })
@@ -341,7 +342,11 @@ window.addEventListener('deck-updated', () => {
   renderDeck()
   updateStatsBar()
   const deckbuilderVisible = !document.querySelector('.deckbuilding-view').classList.contains('hidden')
-  if (deckbuilderVisible) showCommanderPicker(window.currentDeck)
+  if (deckbuilderVisible){ 
+    showCommanderPicker(window.currentDeck)
+    const commanderModalShowing = !document.getElementById('commander-modal').classList.contains('hidden')
+    if (!commanderModalShowing) showCompanionPicker(window.currentSideboard, window.currentDeck)
+  }
 })
 
 function updateStatsBar(){
@@ -397,6 +402,39 @@ function showCommanderPicker(deck) {
     commanderList.focus()
 }
 
+function showCompanionPicker(sideboard, deck) {
+    const hasCompanion = deck.some(c => c.isCompanion)
+    if (hasCompanion) return
+
+    const hasSideboard = sideboard.length > 0
+    if (!hasSideboard) return
+
+    const validCompanion = sideboard.filter(c => window.electronAPI.findCompanion(deck, c.name))
+    if (validCompanion.length === 0) return
+
+    const companionList = document.getElementById('companion-list')
+    companionList.innerHTML = ''
+    validCompanion.forEach(card => {
+        const option = document.createElement('div')
+        option.classList.add('companion-option')
+        option.textContent = card.name
+        option.addEventListener('click', () => {
+            window.currentDeck.push({...card, isCompanion: true})
+            window.currentSideboard = window.currentSideboard.filter(c => c.name !== card.name)
+            document.getElementById('companion-modal').classList.add('hidden')
+            window.dispatchEvent(new CustomEvent('deck-updated'))
+        })
+        companionList.appendChild(option)
+    })
+
+    document.getElementById('companion-modal').classList.remove('hidden')
+    companionList.focus()
+}
+
+document.getElementById('companion-skip-btn').addEventListener('click', () => {
+    document.getElementById('companion-modal').classList.add('hidden')
+})
+
 document.getElementById('commander-skip-btn').addEventListener('click', () => {
     document.getElementById('commander-modal').classList.add('hidden')
 })
@@ -404,7 +442,11 @@ document.getElementById('commander-skip-btn').addEventListener('click', () => {
 window.addEventListener('deck-updated', () => {
     renderDeck()
     const deckbuilderVisible = !document.querySelector('.deckbuilding-view').classList.contains('hidden')
-    if (deckbuilderVisible) showCommanderPicker(window.currentDeck)
+    if (deckbuilderVisible) { 
+        showCommanderPicker(window.currentDeck)
+        const commanderModalShowing = !document.getElementById('commander-modal').classList.contains('hidden')
+        if (!commanderModalShowing) showCompanionPicker(window.currentSideboard, window.currentDeck)
+    }
 })
 
 viewSelect.addEventListener('change', renderDeck)
@@ -412,6 +454,8 @@ viewSelect.addEventListener('change', renderDeck)
 window.addEventListener('deckbuilder-opened', () => {
   if (window.currentDeck && window.currentDeck.length > 0) {
     showCommanderPicker(window.currentDeck)
+    const commanderModalShowing = !document.getElementById('commander-modal').classList.contains('hidden')
+    if (!commanderModalShowing) showCompanionPicker(window.currentSideboard, window.currentDeck)
   }
 })
 
@@ -419,12 +463,51 @@ document.addEventListener('keydown', e =>{
   if (e.key === 'Escape') {
     addCardModal.classList.add('hidden')
     document.getElementById('commander-modal').classList.add('hidden')
+    document.getElementById('companion-modal').classList.add('hidden')
   }
 })
 
 document.getElementById('commander-list').addEventListener('keydown', e => {
     const options = document.querySelectorAll('.commander-option')
     const current = document.querySelector('.commander-option.focused')
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        if (!current) {
+            options[0]?.classList.add('focused')
+            options[0]?.scrollIntoView({ block: 'nearest' })
+        } else {
+            const next = current.nextElementSibling
+            current.classList.remove('focused')
+            if (next) {
+                next.classList.add('focused')
+                next.scrollIntoView({ block: 'nearest' })
+            } else {
+                options[0]?.classList.add('focused')
+                options[0]?.scrollIntoView({ block: 'nearest' })
+            }
+        }
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        if (current) {
+            const prev = current.previousElementSibling
+            current.classList.remove('focused')
+            if (prev) {
+                prev.classList.add('focused')
+                prev.scrollIntoView({ block: 'nearest' })
+            } else {
+                options[options.length - 1]?.classList.add('focused')
+                options[options.length - 1]?.scrollIntoView({ block: 'nearest' })
+            }
+        }
+    } else if (e.key === 'Enter') {
+        if (current) current.click()
+    }
+})
+
+document.getElementById('companion-list').addEventListener('keydown', e => {
+    const options = document.querySelectorAll('.companion-option')
+    const current = document.querySelector('.companion-option.focused')
 
     if (e.key === 'ArrowDown') {
         e.preventDefault()

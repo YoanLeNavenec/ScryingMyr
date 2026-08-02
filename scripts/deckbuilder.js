@@ -53,6 +53,21 @@ document.getElementById('add-card-cancel-btn').addEventListener('click', () => {
   addCardModal.classList.add('hidden')
 })
 
+function getBanStatus(card, format) {
+    if (format === 'commander' || format === 'cedh') {
+       return window.electronAPI.getBanlist(card.name, format)
+    }
+    if (format === 'duelcommander') {
+        const inDeck = window.electronAPI.getBanlist(card.name, format, 'banned_in_deck')
+        const offensive = window.electronAPI.getBanlist(card.name, format, 'banned_offensive_content')
+        const asCommander = card.isCommander ? window.electronAPI.getBanlist(card.name, format, 'banned_as_commander') : false
+        const asCompanion = card.isCompanion ? window.electronAPI.getBanlist(card.name, format, 'banned_as_companion') : false
+        return inDeck || offensive || asCommander || asCompanion
+    }
+    showToast('Oops! We havent added this format yet!')
+    return false
+}
+
 // Search as you type
 cardSearchInput.addEventListener('keyup', async (e) => {
   if (['ArrowDown', 'ArrowUp', 'Enter'].includes(e.key)) return
@@ -197,6 +212,9 @@ function renderGridView() {
             const cardEl = document.createElement('div')
             cardEl.classList.add('deck-card')
 
+            if (getBanStatus(card, formatSelector.value))
+                cardEl.classList.add('illegal-card')
+
             const cardTop = document.createElement('div')
             cardTop.classList.add('deck-card-top')
             if (card.quantity > 1){
@@ -272,6 +290,9 @@ function renderListView() {
         cards.forEach(card => {
             const row = document.createElement('div')
             row.classList.add('deck-list-row')
+
+            if (getBanStatus(card, formatSelector.value))
+                row.classList.add('illegal-card')
 
             const rowName = document.createElement('span')
             rowName.classList.add('deck-list-name')

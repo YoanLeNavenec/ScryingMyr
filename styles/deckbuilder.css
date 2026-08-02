@@ -230,6 +230,7 @@
 .deck-list-row {
     display: grid;
     grid-template-columns: 1fr 70px 1fr 50px 40px 40px;
+    position: relative;
     align-items: center;
     gap: 0.5rem;
     background: var(--card);
@@ -314,4 +315,15 @@
 
 .deck-card:hover .deck-card-delete{
     display:flex;
+}
+
+.deck-card--banned::after,
+.illegal-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(220, 38, 38, 0.4);
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
 }

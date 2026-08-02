@@ -4,6 +4,7 @@ const { importDeckList } = require(path.join(__dirname, 'src', 'import'))
 const { exportDeckList } = require(path.join(__dirname, 'src', 'export'))
 const { isBanned } = require(path.join(__dirname, 'src', 'banlist'))
 const { meetsCompanionRequirement } = require(path.join(__dirname, 'src', 'companion'))
+const { getPartnerInfo, arePartners } = require(path.join(__dirname, 'src', 'partner'))
 
 contextBridge.exposeInMainWorld('electronAPI', {
   saveMessage: (conversationId, message) => ipcRenderer.invoke('save-message', { conversationId, message}),
@@ -16,5 +17,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   lookupCard: (cardName) => ipcRenderer.invoke('lookup-card', cardName),
   searchCards: (query) => ipcRenderer.invoke('search-cards', query),
   getBanlist: (cardName, format, category) => isBanned(cardName, format, category),
-  findCompanion: (deck, companionName) => meetsCompanionRequirement(deck, companionName)
+  findCompanion: (deck, companionName) => meetsCompanionRequirement(deck, companionName),
+  partnerInfo: (card) => getPartnerInfo(card),
+  cardPartners: (cardA, cardB) => arePartners(cardA, cardB)
 })

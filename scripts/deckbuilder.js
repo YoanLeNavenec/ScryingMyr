@@ -404,20 +404,56 @@ function showCommanderPicker(deck) {
     const legendaries = deck.filter(c => c.type && c.type.includes('Legendary') && c.type.includes('Creature'))
     if (legendaries.length === 0) return
 
-    const commanderList = document.getElementById('commander-list')
-    commanderList.innerHTML = ''
+    console.log('Ellie 1:', window.electronAPI.partnerInfo(deck.find(c => c.name.includes('Brick Master'))))
+    console.log('Ellie 2:', window.electronAPI.partnerInfo(deck.find(c => c.name.includes('Vengeful Hunter'))))
 
-    legendaries.forEach(card => {
-        const option = document.createElement('div')
-        option.classList.add('commander-option')
-        option.textContent = card.name
-        option.addEventListener('click', () => {
-            card.isCommander = true
-            document.getElementById('commander-modal').classList.add('hidden')
-            window.dispatchEvent(new CustomEvent('deck-updated'))
+    const hasPartnerPair = legendaries.some(cardA =>
+      deck.some(cardB => cardB.name !== cardA.name && window.electronAPI.cardPartners(cardA, cardB))
+    )
+
+    const partnerLabel = document.getElementById('partner-checkbox-label')
+    if (hasPartnerPair) {
+      partnerLabel.classList.remove('hidden')
+    } else {
+      partnerLabel.classList.add('hidden')
+      document.getElementById('partner-checkbox').checked = false
+    }
+
+    const commanderList = document.getElementById('commander-list')
+
+    function selectCommanderPartner(candidates) {
+        commanderList.innerHTML = ''
+
+        const modalMessage = document.getElementById('commander-modal-message')
+        if (deck.some(c => c.isCommander)) {
+          modalMessage.textContent = "Pick your partner!"
+        } else {
+          modalMessage.textContent = "I sadly couldn't recognize your commander. Can you tell me who it is?"
+        }
+
+        candidates.forEach(card => {
+            const option = document.createElement('div')
+            option.classList.add('commander-option')
+            option.textContent = card.name
+            option.addEventListener('click', () => {
+                const partnerMode = document.getElementById('partner-checkbox').checked
+                const alreadyHasCommander = deck.some(c => c.isCommander)
+
+                if (partnerMode && !alreadyHasCommander) {
+                    card.isCommander = true
+                    const validPartners = deck.filter(c => window.electronAPI.cardPartners(c, card) && c.name !== card.name)
+                    selectCommanderPartner(validPartners)
+                } else {
+                    card.isCommander = true
+                    document.getElementById('commander-modal').classList.add('hidden')
+                    window.dispatchEvent(new CustomEvent('deck-updated'))
+                }
+            })
+            commanderList.appendChild(option)
         })
-        commanderList.appendChild(option)
-    })
+    }
+
+    selectCommanderPartner(legendaries)
 
     document.getElementById('commander-modal').classList.remove('hidden')
     commanderList.focus()

@@ -22,6 +22,24 @@ function getTypeGroup(card) {
     return 'Other'
 }
 
+//Checks Color Identity of the card 
+function getColorIdentity(card) {
+  if (card.colorIdentity && card.colorIdentity.length > 0) return card.colorIdentity
+
+  const colors = ['W', 'U', 'B', 'R', 'G']
+  const source = `${card.manaCost || ''} ${card.text || ''}`
+  const symbols = source.match(/\{[^}]+\}/g) || []
+
+  const found = new Set()
+  symbols.forEach(symbol => {
+    colors.forEach(color => {
+      if (symbol.includes(color)) found.add(color)
+    })
+  })
+
+  return colors.filter(c => found.has(c))
+}
+
 function isDuplicateViolation(card){
   if (!singletonFormats.includes(formatSelector.value)) return false
   if (card.quantity <= 1) return false
@@ -53,6 +71,7 @@ document.getElementById('add-card-cancel-btn').addEventListener('click', () => {
   addCardModal.classList.add('hidden')
 })
 
+//Check if the card is banned
 function getBanStatus(card, format) {
     if (format === 'commander' || format === 'cedh') {
        return window.electronAPI.getBanlist(card.name, format)

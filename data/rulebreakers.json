@@ -1,0 +1,10 @@
+{
+  "Seluma, Light of Aysen": { "kind": "creature-type", "types": ["Angel"] },
+  "The Everforger": { "kind": "type-list", "types": ["Artifact Creature", "Equipment"] },
+  "Maular, the Next Evolution": { "kind": "min-mv-creature", "value": 7 },
+  "Valko Indorian": { "kind": "creature-type", "types": ["Phyrexian"] },
+  "Tolabow, Loch Rascal": { "kind": "instant-sorcery-choice" },
+  "The Unluckiest Planeswalker": { "kind": "type-list", "types": ["Enchantment — Aura"] },
+  "Grizzlegom, Hurloon Hero": { "kind": "any-land" },
+  "Whtz, the Bibliophile": { "kind": "no-max-deck-size" }
+}

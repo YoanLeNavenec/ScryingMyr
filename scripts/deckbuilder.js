@@ -404,9 +404,6 @@ function showCommanderPicker(deck) {
     const legendaries = deck.filter(c => c.type && c.type.includes('Legendary') && c.type.includes('Creature'))
     if (legendaries.length === 0) return
 
-    console.log('Ellie 1:', window.electronAPI.partnerInfo(deck.find(c => c.name.includes('Brick Master'))))
-    console.log('Ellie 2:', window.electronAPI.partnerInfo(deck.find(c => c.name.includes('Vengeful Hunter'))))
-
     const hasPartnerPair = legendaries.some(cardA =>
       deck.some(cardB => cardB.name !== cardA.name && window.electronAPI.cardPartners(cardA, cardB))
     )

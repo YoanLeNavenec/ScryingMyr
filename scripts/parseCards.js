@@ -3,14 +3,14 @@ const StreamObject = require('stream-json/streamers/StreamObject');
 const fs = require('fs');
 const path = require('path');
 const {pick} = require('stream-json/filters/Pick');
-
+ 
 const processedCards = new Map();
-
+ 
 const pipeline = fs.createReadStream(path.join(__dirname, '../AllPrintings.json'))
 .pipe(parser())
 .pipe(pick({filter: 'data'}))
 .pipe(StreamObject.make());
-
+ 
 // Handle each card object as it is parsed
 pipeline.on('data', data => {
   data.value.cards.forEach(card => {
@@ -31,6 +31,7 @@ pipeline.on('data', data => {
         toughness: card.toughness,
         text: card.text,
         frenchText: frenchData ? frenchData.text : null,
+        flavorNames: card.flavorName ? [card.flavorName] : [],
         printings: [{
           artist: card.artist,
           setCode: card.setCode,
@@ -47,10 +48,13 @@ pipeline.on('data', data => {
         setCode: card.setCode,
         number: card.number,
       });
+      if (card.flavorName && !existingCard.flavorNames.includes(card.flavorName)) {
+        existingCard.flavorNames.push(card.flavorName)
+      }
     }
   });
 });
-
+ 
 //write the processed cards to a new JSON when the stream ends
 pipeline.on('end', () => {
     fs.writeFileSync(

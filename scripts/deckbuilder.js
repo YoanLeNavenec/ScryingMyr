@@ -40,6 +40,15 @@ function getColorIdentity(card) {
   return colors.filter(c => found.has(c))
 }
 
+//sets deck's color identity
+function getDeckColorIdentity(deck){
+    const commanders = deck.filter(c => c.isCommander)
+    const allColors = commanders.flatMap(c => getColorIdentity(c))
+    const uniqueColors = [...new Set(allColors)]
+    const order = ['W', 'U', 'B', 'R', 'G']
+    return order.filter(c => uniqueColors.includes(c))
+}
+
 function isDuplicateViolation(card){
   if (!singletonFormats.includes(formatSelector.value)) return false
   if (card.quantity <= 1) return false

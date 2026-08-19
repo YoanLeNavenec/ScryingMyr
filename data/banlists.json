@@ -21,7 +21,6 @@
       "Leovold, Emissary of Trest",
       "Library of Alexandria",
       "Limited Resources",
-      "Lutri, the Spellchaser",
       "Mana Crypt",
       "Mox Emerald",
       "Mox Jet",
@@ -44,6 +43,9 @@
       "Trade Secrets",
       "Upheaval",
       "Yawgmoth's Bargain"
+    ],
+    "banned_as_commander":[
+      "Lutri, the Spellchaser"
     ]
   },
   "duelcommander": {

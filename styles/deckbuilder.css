@@ -327,3 +327,8 @@
     pointer-events: none;
     z-index: 1;
 }
+
+.deck-card-warning, .deck-list-warning {
+    cursor: help;
+    font-size: 0.9rem;
+}

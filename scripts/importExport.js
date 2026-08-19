@@ -16,6 +16,7 @@ importBtn.addEventListener('click', async function(){
       const fullCard = await window.electronAPI.lookupCard(card.name)
       return fullCard ? {...fullCard, quantity: card.quantity, isCommander: card.isCommander} : card
     }))
+
     window.currentDeck = enriched
 
     const enrichedSideboard = await Promise.all(sideboard.map(async card => { 

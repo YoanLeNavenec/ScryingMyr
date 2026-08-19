@@ -49,6 +49,12 @@ function getDeckColorIdentity(deck){
     return order.filter(c => uniqueColors.includes(c))
 }
 
+function isCardLegalInDeck(card, deck){
+    const deckColors = getDeckColorIdentity(deck)
+    const cardColors = getColorIdentity(card)
+    return cardColors.every(color => deckColors.includes(color))
+}
+
 function isDuplicateViolation(card){
   if (!singletonFormats.includes(formatSelector.value)) return false
   if (card.quantity <= 1) return false
@@ -180,8 +186,11 @@ cardSearchInput.addEventListener('keydown', e => {
 }
 })
 
-
 function addCardToDecklist(card){
+  if (!isCardLegalInDeck(card, window.currentDeck)){
+    showToast("This card isn't in the right colors!")
+    return
+  }
   const existing = window.currentDeck.find(c => c.name === card.name)
   if (existing) {
     existing.quantity += 1
@@ -286,6 +295,14 @@ function renderGridView() {
             cardDel.classList.add('deck-card-delete')
             cardDel.addEventListener('click', () => removeCardFromDecklist(card))
 
+            if (card.offColor){
+                const warningBadge = document.createElement('span')
+                warningBadge.classList.add('deck-card-warning')
+                warningBadge.textContent = '⚠️'
+                warningBadge.title = "THis card doesn't fit your deck's color identity."
+                cardEl.appendChild(warningBadge)
+            }
+
             cardEl.appendChild(cardTop)
             cardEl.appendChild(cardType)
             cardEl.appendChild(cardText)
@@ -357,6 +374,14 @@ function renderListView() {
             rowDel.classList.add('deck-row-delete')
             rowDel.addEventListener('click', () => removeCardFromDecklist(card))
 
+            if (card.offColor) {
+                const rowWarning = document.createElement('span')
+                rowWarning.classList.add('deck-list-warning')
+                rowWarning.textContent = '⚠️'
+                rowWarning.title = "This card doesn't fit your deck's color identity."
+                row.appendChild(rowWarning)
+            }
+
             row.appendChild(rowName)
             row.appendChild(rowMana)
             row.appendChild(rowType)
@@ -390,6 +415,11 @@ function renderDeck() {
 window.addEventListener('deck-updated', () => {
   renderDeck()
   updateStatsBar()
+  if (getDeckColorIdentity(window.currentDeck).length > 0){
+    window.currentDeck.forEach(card => {
+        card.offColor = !isCardLegalInDeck(card, window.currentDeck)
+    })
+  }
   const deckbuilderVisible = !document.querySelector('.deckbuilding-view').classList.contains('hidden')
   if (deckbuilderVisible){ 
     showCommanderPicker(window.currentDeck)

@@ -49,10 +49,17 @@ function getDeckColorIdentity(deck){
     return order.filter(c => uniqueColors.includes(c))
 }
 
+function isLandColorLegal(card, deckColors){
+    const basicTypes = ['Mountain', 'Island', 'Swamp', 'Forest', 'Plains']
+    const landType = card.type
+    if (!basicTypes.some(type => landType.includes(type))) return true
+    return (card.producedMana || []).every(color => deckColors.includes(color))
+}
+
 function isCardLegalInDeck(card, deck){
     const deckColors = getDeckColorIdentity(deck)
     const cardColors = getColorIdentity(card)
-    return cardColors.every(color => deckColors.includes(color))
+    return cardColors.every(color => deckColors.includes(color)) && isLandColorLegal(card, deckColors)
 }
 
 function isDuplicateViolation(card){

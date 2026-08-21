@@ -26,6 +26,7 @@ pipeline.on('data', data => {
         manaCost: card.manaCost,
         manaValue: card.manaValue,
         colorIdentity: card.colorIdentity,
+        producedMana: card.producedMana,
         type: card.type,
         power: card.power,
         toughness: card.toughness,

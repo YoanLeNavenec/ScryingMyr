@@ -89,10 +89,14 @@ document.getElementById('add-card-cancel-btn').addEventListener('click', () => {
 //Check if the card is banned
 function getBanStatus(card, format) {
     if (window.electronAPI.isOffensive(card.name)) return true
-
-    if (format === 'commander' || format === 'cedh') {
-       return window.electronAPI.getBanlist(card.name, format)
     }
+    
+    if (format === 'commander' || format === 'cedh') {
+        const banned = window.electronAPI.getBanlist(card.name, format, 'banned')
+        const asCompanion = card.isCompanion ? window.electronAPI.getBanlist(card.name, format, 'banned_as_companion') : false
+        return banned || asCompanion
+    }
+    
     if (format === 'duelcommander') {
         const inDeck = window.electronAPI.getBanlist(card.name, format, 'banned_in_deck')
         const offensive = window.electronAPI.getBanlist(card.name, format, 'banned_offensive_content')

@@ -88,6 +88,8 @@ document.getElementById('add-card-cancel-btn').addEventListener('click', () => {
 
 //Check if the card is banned
 function getBanStatus(card, format) {
+    if (window.electronAPI.isOffensive(card.name)) return true
+
     if (format === 'commander' || format === 'cedh') {
        return window.electronAPI.getBanlist(card.name, format)
     }

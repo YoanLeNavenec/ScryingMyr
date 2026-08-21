@@ -1,4 +1,8 @@
 {
+  "offensive":
+    [
+      "Cleanse", "Crusade", "Imprison", "Invoke Prejudice", "Jihad", "Pradesh Gypsies", "Stone-Throwing Devils"
+    ],
   "commander": {
     "banned": [
       "Ancestral Recall",
@@ -44,7 +48,7 @@
       "Upheaval",
       "Yawgmoth's Bargain"
     ],
-    "banned_as_commander":[
+    "banned_as_companion":[
       "Lutri, the Spellchaser"
     ]
   },
@@ -159,15 +163,6 @@
     ],
     "banned_as_companion": [
       "Lutri, the Spellchaser"
-    ],
-    "banned_offensive_content": [
-      "Cleanse",
-      "Crusade",
-      "Imprison",
-      "Invoke Prejudice",
-      "Jihad",
-      "Pradesh Gypsies",
-      "Stone-Throwing Devils"
     ]
   }
 }

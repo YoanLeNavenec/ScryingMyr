@@ -71,7 +71,7 @@ function matchesRulebreakerException(card, deck){
     return commanders.some(commander => {
         const rule = window.electronAPI.getRulebreakerRule(commander.name)
         if (!rule) return false
-        if (rule.kind  === 'creature-type' || rule.kind === 'type-list') {
+        if (rule.kind === 'creature-type' || rule.kind === 'type-list') {
             return isRulebreakerMatch(card, rule.types)
         }
         return false
@@ -79,6 +79,8 @@ function matchesRulebreakerException(card, deck){
 }
 
 function isCardLegalInDeck(card, deck){
+    const commanders = deck.filter(c => c.isCommander)
+    if (commanders.length === 0) return true
     const deckColors = getDeckColorIdentity(deck)
     const cardColors = getColorIdentity(card)
     if (card.type.includes('Land') && isGrizzlegomCommander(deck)) return true

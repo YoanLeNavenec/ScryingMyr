@@ -3,8 +3,8 @@
   "The Everforger": { "kind": "type-list", "types": ["Artifact Creature", "Equipment"], "exception": "Basic Land"},
   "Maular, the Next Evolution": { "kind": "min-mv-creature", "value": 7, "exception": "Basic Land"},
   "Valko Indorian": { "kind": "creature-type", "types": ["Phyrexian"], "exception": "Basic Land"},
-  "Tolabow, Loch Rascal": { "kind": "instant-sorcery-choice" },
   "The Unluckiest Planeswalker": { "kind": "type-list", "types": ["Enchantment — Aura"], "exception": "Basic Land"},
   "Grizzlegom, Hurloon Hero": { "kind": "any-land" },
-  "Whtz, the Bibliophile": { "kind": "no-max-deck-size" }
+  "Whtz, the Bibliophile": { "kind": "no-max-deck-size" },
+  "Tolabow, Loch Rascal": { "kind": "instant-sorcery-choice", "exception": "Basic Land"}
 }

@@ -84,6 +84,15 @@ function isRulebreakerMatch(card, types){
     return types.some(type => card.type.includes(type))
 }
 
+function getChosenColor(card){
+    if (!card.chosenColor){
+        let color = prompt(`Pick a color ! (W, U, B, R, G):`)
+        const validColors = ['W', 'U', 'B', 'R', 'G']
+        card.chosenColor = color && validColors.includes(color.toUpperCase()) ? color.toUpperCase() : null
+    }
+    return card.chosenColor
+}
+
 function matchesRulebreakerException(card, deck){
     const commanders = deck.filter(c => c.isCommander)
 
@@ -95,6 +104,12 @@ function matchesRulebreakerException(card, deck){
         }
         if (rule.kind === 'min-mv-creature' && card.manaValue >= rule.value && card.type.includes('Creature')){
             return true
+        }
+        if (rule.kind === 'instant-sorcery-choice'){
+            if (!card.type.includes('Instant') && !card.type.includes('Sorcery')) return false
+            const chosenColor = getChosenColor(card)
+            const allowedColors = [...getColorIdentity(commander), chosenColor].filter(Boolean)
+            return getColorIdentity(card).every(color => allowedColors.includes(color))
         }
         return false
     })

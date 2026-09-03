@@ -56,9 +56,15 @@ function isLandColorLegal(card, deckColors){
     return (card.producedMana || []).every(color => deckColors.includes(color))
 }
 
+function isGrizzlegomCommander(deck){
+    const commanders = deck.filter(c => c.isCommander)
+    return commanders.some(card => card.name === 'Grizzlegom, Hurloon Hero')
+}
+
 function isCardLegalInDeck(card, deck){
     const deckColors = getDeckColorIdentity(deck)
     const cardColors = getColorIdentity(card)
+    if (card.type.includes('Land') && isGrizzlegomCommander(deck)) return true
     return cardColors.every(color => deckColors.includes(color)) && isLandColorLegal(card, deckColors)
 }
 

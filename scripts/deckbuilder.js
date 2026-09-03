@@ -65,10 +65,24 @@ function isRulebreakerMatch(card, types){
     return types.some(type => card.type.includes(type))
 }
 
+function matchesRulebreakerException(card, deck){
+    const commanders = deck.filter(c => c.isCommander)
+
+    return commanders.some(commander => {
+        const rule = window.electronAPI.getRulebreakerRule(commander.name)
+        if (!rule) return false
+        if (rule.kind  === 'creature-type' || rule.kind === 'type-list') {
+            return isRulebreakerMatch(card, rule.types)
+        }
+        return false
+    })
+}
+
 function isCardLegalInDeck(card, deck){
     const deckColors = getDeckColorIdentity(deck)
     const cardColors = getColorIdentity(card)
     if (card.type.includes('Land') && isGrizzlegomCommander(deck)) return true
+    if (matchesRulebreakerException(card, deck)) return true
     return cardColors.every(color => deckColors.includes(color)) && isLandColorLegal(card, deckColors)
 }
 

@@ -107,7 +107,7 @@ function matchesRulebreakerException(card, deck){
         }
         if (rule.kind === 'instant-sorcery-choice'){
             if (!card.type.includes('Instant') && !card.type.includes('Sorcery')) return false
-            const chosenColor = getChosenColor(card)
+            const chosenColor = getChosenColor(commander)
             const allowedColors = [...getColorIdentity(commander), chosenColor].filter(Boolean)
             return getColorIdentity(card).every(color => allowedColors.includes(color))
         }

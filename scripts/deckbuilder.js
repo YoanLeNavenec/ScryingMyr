@@ -49,6 +49,14 @@ function getDeckColorIdentity(deck){
     return order.filter(c => uniqueColors.includes(c))
 }
 
+function hasBasicLandException(deck){
+    const commanders = deck.filter(c => c.isCommander)
+    return commanders.some(commander => {
+        const rule = window.electronAPI.getRulebreakerRule(commander.name)
+        return rule && rule.exception === 'Basic Land'
+    })
+}
+
 function isLandColorLegal(card, deckColors){
     const basicTypes = ['Mountain', 'Island', 'Swamp', 'Forest', 'Plains']
     const landType = card.type

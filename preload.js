@@ -5,6 +5,7 @@ const { exportDeckList } = require(path.join(__dirname, 'src', 'export'))
 const { meetsCompanionRequirement } = require(path.join(__dirname, 'src', 'companion'))
 const { getPartnerInfo, arePartners } = require(path.join(__dirname, 'src', 'partner'))
 const { isBanned, isOffensive } = require(path.join(__dirname, 'src', 'banlist'))
+const { getRulebreakerRule } = require(path.join(__dirname, 'src', 'rulebreaker'))
 
 contextBridge.exposeInMainWorld('electronAPI', {
   saveMessage: (conversationId, message) => ipcRenderer.invoke('save-message', { conversationId, message}),
@@ -21,5 +22,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   partnerInfo: (card) => getPartnerInfo(card),
   cardPartners: (cardA, cardB) => arePartners(cardA, cardB),
   getBanlist: (cardName, format, category) => isBanned(cardName, format, category),
-  isOffensive: (cardName) => isOffensive(cardName)
+  isOffensive: (cardName) => isOffensive(cardName),
+  getRulebreakerRule: (commanderName) => getRulebreakerRule(commanderName)
 })

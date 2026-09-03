@@ -61,6 +61,10 @@ function isGrizzlegomCommander(deck){
     return commanders.some(card => card.name === 'Grizzlegom, Hurloon Hero')
 }
 
+function isRulebreakerMatch(card, types){
+    return types.some(type => card.type.includes(type))
+}
+
 function isCardLegalInDeck(card, deck){
     const deckColors = getDeckColorIdentity(deck)
     const cardColors = getColorIdentity(card)

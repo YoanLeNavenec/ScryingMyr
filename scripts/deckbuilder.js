@@ -1,11 +1,13 @@
 const deckGrid = document.querySelector('.deck-grid')
 const viewSelect = document.querySelector('.deck-view-select')
 const formatSelector = document.querySelector('.deck-format-selector')
-const singletonFormats = ['commander', 'cedh', 'duelcommander']
 const addCardBtn = document.querySelector('.deck-add-btn')
 const addCardModal = document.getElementById('add-card-modal')
 const cardSearchInput = document.getElementById('card-search-input')
 const cardSearchResults = document.getElementById('card-search-results')
+
+const singletonFormats = ['commander', 'cedh', 'duelcommander']
+const deckSizeLimits = { commander: 100, cedh: 100, duelcommander: 100}
 
 function getTypeGroup(card) {
     if (card.isCommander) return 'Commander'
@@ -73,6 +75,11 @@ function isGrizzlegomCommander(deck){
     return commanders.some(card => card.name === 'Grizzlegom, Hurloon Hero')
 }
 
+function isWhtzCommander(deck){
+    const commanders = deck.filter(c => c.isCommander)
+    return commanders.some(card => card.name === 'Whtz, the Bibliophile')
+}
+
 function isRulebreakerMatch(card, types){
     return types.some(type => card.type.includes(type))
 }
@@ -91,6 +98,14 @@ function matchesRulebreakerException(card, deck){
         }
         return false
     })
+}
+
+function isDeckFull(deck, format){
+    if (isWhtzCommander(deck)) return false
+    const limit = deckSizeLimits[format]
+    if (!limit) return false
+    const totalCards = deck.reduce((sum, card) => sum + (card.quantity || 1), 0)
+    return totalCards >= limit
 }
 
 function isCardLegalInDeck(card, deck){
@@ -243,6 +258,10 @@ cardSearchInput.addEventListener('keydown', e => {
 function addCardToDecklist(card){
   if (!isCardLegalInDeck(card, window.currentDeck)){
     showToast("This card isn't in the right colors!")
+    return
+  }
+  if (isDeckFull(window.currentDeck, formatSelector.value)){
+    showToast("Your deck is already full! Time for cuts!")
     return
   }
   const existing = window.currentDeck.find(c => c.name === card.name)

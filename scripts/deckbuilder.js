@@ -86,6 +86,9 @@ function matchesRulebreakerException(card, deck){
         if (rule.kind === 'creature-type' || rule.kind === 'type-list') {
             return isRulebreakerMatch(card, rule.types)
         }
+        if (rule.kind === 'min-mv-creature' && card.manaValue >= rule.value && card.type.includes('Creature')){
+            return true
+        }
         return false
     })
 }

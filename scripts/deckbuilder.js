@@ -57,10 +57,11 @@ function hasBasicLandException(deck){
     })
 }
 
-function isLandColorLegal(card, deckColors){
+function isLandColorLegal(card, deckColors, deck){
     const basicTypes = ['Mountain', 'Island', 'Swamp', 'Forest', 'Plains']
     const landType = card.type
     if (!basicTypes.some(type => landType.includes(type))) return true
+    if (hasBasicLandException(deck)) return true
     return (card.producedMana || []).every(color => deckColors.includes(color))
 }
 
@@ -93,7 +94,7 @@ function isCardLegalInDeck(card, deck){
     const cardColors = getColorIdentity(card)
     if (card.type.includes('Land') && isGrizzlegomCommander(deck)) return true
     if (matchesRulebreakerException(card, deck)) return true
-    return cardColors.every(color => deckColors.includes(color)) && isLandColorLegal(card, deckColors)
+    return cardColors.every(color => deckColors.includes(color)) && isLandColorLegal(card, deckColors, deck)
 }
 
 function isDuplicateViolation(card){

@@ -32,7 +32,7 @@ pipeline.on('data', data => {
         toughness: card.toughness,
         text: card.text,
         frenchText: frenchData ? frenchData.text : null,
-        flavorNames: [card.flavorName, card.faceFlavorName, card.printedName, card.facePrintedName].filter(Boolean),
+        flavorNames: [... new Set([card.flavorName, card.faceFlavorName, card.printedName, card.facePrintedName])].filter(Boolean),
         printings: [{
           artist: card.artist,
           setCode: card.setCode,
@@ -44,11 +44,14 @@ pipeline.on('data', data => {
     } else {
       //if the card already exists, add the new printing to the existing card object
       const existingCard = processedCards.get(card.name);
-      existingCard.printings.push({
-        artist: card.artist,
-        setCode: card.setCode,
-        number: card.number,
-      });
+      const alreadyExists = existingCard.printings.some(printing => printing.setCode === card.setCode && printing.number === card.number);
+      if (!alreadyExists) {
+        existingCard.printings.push({
+          artist: card.artist,
+          setCode: card.setCode,
+          number: card.number,
+        });
+      }
       if (card.flavorName && !existingCard.flavorNames.includes(card.flavorName)) {
         existingCard.flavorNames.push(card.flavorName)
       }

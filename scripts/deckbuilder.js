@@ -539,7 +539,7 @@ function updateStatsBar(){
 
   document.querySelector('.deck-count').textContent = `${totalCards} / 100 cards`
 
-  const commanders = deck.filter(c => c.isCommander)
+  const commanders = window.currentDeck.filter(c => c.isCommander)
   const allCommanders = commanders.map(commander => commander.name)
   if (allCommanders.length === 0) {
     document.querySelector('.deck-commander').textContent = 'None'

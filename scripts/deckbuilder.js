@@ -538,6 +538,16 @@ function updateStatsBar(){
   const avgCMC = totalCards > 0 ? (totalMV / totalCards).toFixed(2) : '-'
 
   document.querySelector('.deck-count').textContent = `${totalCards} / 100 cards`
+
+  const commanders = deck.filter(c => c.isCommander)
+  const allCommanders = commanders.map(commander => commander.name)
+  if (allCommanders.length === 0) {
+    document.querySelector('.deck-commander').textContent = 'None'
+    } else {
+        const cleanAllCommanders = allCommanders.join(' & ')
+        document.querySelector('.deck-commander').textContent = cleanAllCommanders
+    }
+
   document.querySelector('.deck-colors').textContent =
     `W: ${colorCounts.W} · U: ${colorCounts.U} · B: ${colorCounts.B} · R: ${colorCounts.R} · G: ${colorCounts.G}${colorCounts.C > 0 ? ` · C: ${colorCounts.C}` : ''}`
   document.querySelector('.deck-avgcmc').textContent = `Avg CMC: ${avgCMC}`

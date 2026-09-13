@@ -9,6 +9,11 @@ const cardSearchResults = document.getElementById('card-search-results')
 const singletonFormats = ['commander', 'cedh', 'duelcommander']
 const deckSizeLimits = { commander: 100, cedh: 100, duelcommander: 100}
 
+// Update the deck when the format changes
+formatSelector.addEventListener('change', () => {
+    window.dispatchEvent(new CustomEvent('deck-updated'))
+})
+
 function getTypeGroup(card) {
     if (card.isCommander) return 'Commander'
     if (card.isCompanion) return 'Companion'

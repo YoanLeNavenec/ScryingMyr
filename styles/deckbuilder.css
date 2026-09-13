@@ -162,6 +162,11 @@
     font-size: 0.75rem;
 }
 
+.deck-card.focused {
+  background: var(--highlight);
+  color: var(--accent-foreground);
+}
+
 .deck-card-top {
     display: flex;
     justify-content: space-between;

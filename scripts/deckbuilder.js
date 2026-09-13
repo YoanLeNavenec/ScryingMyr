@@ -14,6 +14,7 @@ formatSelector.addEventListener('change', () => {
     window.dispatchEvent(new CustomEvent('deck-updated'))
 })
 
+// Determine the type group of a card for sorting and grouping
 function getTypeGroup(card) {
     if (card.isCommander) return 'Commander'
     if (card.isCompanion) return 'Companion'
@@ -56,6 +57,7 @@ function getDeckColorIdentity(deck){
     return order.filter(c => uniqueColors.includes(c))
 }
 
+// Check if the deck has a commander with a basic land exception
 function hasBasicLandException(deck){
     const commanders = deck.filter(c => c.isCommander)
     return commanders.some(commander => {
@@ -64,31 +66,37 @@ function hasBasicLandException(deck){
     })
 }
 
+// Check if a card is a basic land type
 function hasBasicLandType(card){
     const basicTypes = ['Mountain', 'Island', 'Swamp', 'Forest', 'Plains']
     return basicTypes.some(type => card.type.includes(type))
 }
 
+// Check if a land card's produced mana colors are legal for the deck's color identity
 function isLandColorLegal(card, deckColors, deck){
     if (!hasBasicLandType(card)) return true
     if (hasBasicLandException(deck)) return true
     return (card.producedMana || []).every(color => deckColors.includes(color))
 }
 
+// Check if the commander is Grizzlegom, Hurloon Hero
 function isGrizzlegomCommander(deck){
     const commanders = deck.filter(c => c.isCommander)
     return commanders.some(card => card.name === 'Grizzlegom, Hurloon Hero')
 }
 
+// Check if the commander is Whtz, the Bibliophile
 function isWhtzCommander(deck){
     const commanders = deck.filter(c => c.isCommander)
     return commanders.some(card => card.name === 'Whtz, the Bibliophile')
 }
 
+// Check if the commander is a rulebreaker and if the card matches the rulebreaker's exception
 function isRulebreakerMatch(card, types){
     return types.some(type => card.type.includes(type))
 }
 
+// Prompt the user to choose a color for a card if it has a rulebreaker exception
 function getChosenColor(card){
     if (!card.chosenColor){
         let color = prompt(`Pick a color ! (W, U, B, R, G):`)
@@ -98,6 +106,7 @@ function getChosenColor(card){
     return card.chosenColor
 }
 
+// Check if a card matches a rulebreaker exception based on the deck's commanders
 function matchesRulebreakerException(card, deck){
     const commanders = deck.filter(c => c.isCommander)
 
@@ -120,6 +129,7 @@ function matchesRulebreakerException(card, deck){
     })
 }
 
+// Check if the deck has reached its size limit
 function isDeckFull(deck, format){
     if (isWhtzCommander(deck)) return false
     const limit = deckSizeLimits[format]
@@ -128,6 +138,7 @@ function isDeckFull(deck, format){
     return totalCards >= limit
 }
 
+// Check if a card is legal in the deck
 function isCardLegalInDeck(card, deck){
     const commanders = deck.filter(c => c.isCommander)
     if (commanders.length === 0) return true
@@ -139,6 +150,7 @@ function isCardLegalInDeck(card, deck){
     return cardColors.every(color => deckColors.includes(color)) && isLandColorLegal(card, deckColors, deck)
 }
 
+// Check if a card exists in more than one copy in the deck
 function isDuplicateViolation(card){
   if (!singletonFormats.includes(formatSelector.value)) return false
   if (card.quantity <= 1) return false
@@ -160,6 +172,7 @@ function isDuplicateViolation(card){
     return true
 }
 
+// Show the add card modal when the "Add Card" button is clicked
 addCardBtn.addEventListener('click', () => {
   addCardModal.classList.remove('hidden')
   cardSearchInput.value = ''
@@ -275,6 +288,7 @@ cardSearchInput.addEventListener('keydown', e => {
 }
 })
 
+//Add a card to the decklist
 function addCardToDecklist(card){
   if (!isCardLegalInDeck(card, window.currentDeck)){
     showToast("This card isn't in the right colors!")
@@ -295,6 +309,7 @@ function addCardToDecklist(card){
   showToast(`${card.name} added to deck!`)
 }
 
+//Remove a card from the decklist
 function removeCardFromDecklist(card){
     const existing = window.currentDeck.find(c => c.name === card.name)
         if (existing){
@@ -308,6 +323,7 @@ function removeCardFromDecklist(card){
     showToast(`${card.name} removed from deck!`)
 }
 
+// Group and sort the deck by card type
 function groupAndSortDeck(deck) {
     const groups = deck.reduce((acc, card) => {
         const group = getTypeGroup(card)
@@ -322,6 +338,7 @@ function groupAndSortDeck(deck) {
     })
 }
 
+// Render the deck in grid view
 function renderGridView() {
     const sortedGroups = groupAndSortDeck(window.currentDeck)
 
@@ -409,6 +426,29 @@ function renderGridView() {
     })
 }
 
+//keyboard navigation for the deck in grid view
+deckGrid.addEventListener('keydown', e => {
+    const cards = Array.from(document.querySelectorAll('.deck-card'))
+    const current = document.querySelector('.deck-card.focused')
+
+    if (e.key === 'ArrowRight') {
+        e.preventDefault()
+        const currentIndex = current ? cards.indexOf(current) : -1
+        const nextIndex = (currentIndex + 1) % cards.length
+        current?.classList.remove('focused')
+        cards[nextIndex]?.classList.add('focused')
+        cards[nextIndex]?.scrollIntoView({ block: 'nearest' })
+    } else if (e.key === 'ArrowLeft') {
+        e.preventDefault()
+        const currentIndex = current ? cards.indexOf(current) : 0
+        const prevIndex = (currentIndex - 1 + cards.length) % cards.length
+        current?.classList.remove('focused')
+        cards[prevIndex]?.classList.add('focused')
+        cards[prevIndex]?.scrollIntoView({ block: 'nearest' })
+    }
+})
+
+// Render the deck in list view
 function renderListView() {
     const sortedGroups = groupAndSortDeck(window.currentDeck)
 
@@ -489,6 +529,7 @@ function renderListView() {
     })
 }
 
+// Render the deck based on the selected view (grid or list)
 function renderDeck() {
     const view = viewSelect.value
     deckGrid.innerHTML = ''
@@ -505,6 +546,7 @@ function renderDeck() {
     }
 }
 
+// Listen for deck updates and re-render the deck and stats bar
 window.addEventListener('deck-updated', () => {
   renderDeck()
   updateStatsBar()
@@ -521,6 +563,7 @@ window.addEventListener('deck-updated', () => {
   }
 })
 
+// Update the stats bar with deck information
 function updateStatsBar(){
   const totalCards = window.currentDeck.reduce((sum, card) => {
     return sum + (card.quantity || 1)
@@ -558,6 +601,8 @@ function updateStatsBar(){
   document.querySelector('.deck-avgcmc').textContent = `Avg CMC: ${avgCMC}`
 }
 
+
+// Show the commander picker modal if the deck has no commander
 function showCommanderPicker(deck) {
     const hasCommander = deck.some(c => c.isCommander)
     if (hasCommander) return
@@ -579,6 +624,7 @@ function showCommanderPicker(deck) {
 
     const commanderList = document.getElementById('commander-list')
 
+    // Function to handle commander selection and partner selection
     function selectCommanderPartner(candidates) {
         commanderList.innerHTML = ''
 
@@ -617,6 +663,7 @@ function showCommanderPicker(deck) {
     commanderList.focus()
 }
 
+// Show the companion picker modal if the deck has no companion
 function showCompanionPicker(sideboard, deck) {
     const hasCompanion = deck.some(c => c.isCompanion)
     if (hasCompanion) return
@@ -644,116 +691,116 @@ function showCompanionPicker(sideboard, deck) {
 
     document.getElementById('companion-modal').classList.remove('hidden')
     companionList.focus()
-}
+    }
 
-document.getElementById('companion-skip-btn').addEventListener('click', () => {
-    document.getElementById('companion-modal').classList.add('hidden')
-})
+    document.getElementById('companion-skip-btn').addEventListener('click', () => {
+        document.getElementById('companion-modal').classList.add('hidden')
+    })
 
-document.getElementById('commander-skip-btn').addEventListener('click', () => {
-    document.getElementById('commander-modal').classList.add('hidden')
-})
+    document.getElementById('commander-skip-btn').addEventListener('click', () => {
+        document.getElementById('commander-modal').classList.add('hidden')
+    })
 
-window.addEventListener('deck-updated', () => {
-    renderDeck()
-    const deckbuilderVisible = !document.querySelector('.deckbuilding-view').classList.contains('hidden')
-    if (deckbuilderVisible) { 
+    window.addEventListener('deck-updated', () => {
+        renderDeck()
+        const deckbuilderVisible = !document.querySelector('.deckbuilding-view').classList.contains('hidden')
+        if (deckbuilderVisible) { 
+            showCommanderPicker(window.currentDeck)
+            const commanderModalShowing = !document.getElementById('commander-modal').classList.contains('hidden')
+            if (!commanderModalShowing) showCompanionPicker(window.currentSideboard, window.currentDeck)
+        }
+    })
+
+    viewSelect.addEventListener('change', renderDeck)
+
+    window.addEventListener('deckbuilder-opened', () => {
+    if (window.currentDeck && window.currentDeck.length > 0) {
         showCommanderPicker(window.currentDeck)
         const commanderModalShowing = !document.getElementById('commander-modal').classList.contains('hidden')
         if (!commanderModalShowing) showCompanionPicker(window.currentSideboard, window.currentDeck)
     }
-})
+    })
 
-viewSelect.addEventListener('change', renderDeck)
+    document.addEventListener('keydown', e =>{
+    if (e.key === 'Escape') {
+        addCardModal.classList.add('hidden')
+        document.getElementById('commander-modal').classList.add('hidden')
+        document.getElementById('companion-modal').classList.add('hidden')
+    }
+    })
 
-window.addEventListener('deckbuilder-opened', () => {
-  if (window.currentDeck && window.currentDeck.length > 0) {
-    showCommanderPicker(window.currentDeck)
-    const commanderModalShowing = !document.getElementById('commander-modal').classList.contains('hidden')
-    if (!commanderModalShowing) showCompanionPicker(window.currentSideboard, window.currentDeck)
-  }
-})
+    document.getElementById('commander-list').addEventListener('keydown', e => {
+        const options = document.querySelectorAll('.commander-option')
+        const current = document.querySelector('.commander-option.focused')
 
-document.addEventListener('keydown', e =>{
-  if (e.key === 'Escape') {
-    addCardModal.classList.add('hidden')
-    document.getElementById('commander-modal').classList.add('hidden')
-    document.getElementById('companion-modal').classList.add('hidden')
-  }
-})
-
-document.getElementById('commander-list').addEventListener('keydown', e => {
-    const options = document.querySelectorAll('.commander-option')
-    const current = document.querySelector('.commander-option.focused')
-
-    if (e.key === 'ArrowDown') {
-        e.preventDefault()
-        if (!current) {
-            options[0]?.classList.add('focused')
-            options[0]?.scrollIntoView({ block: 'nearest' })
-        } else {
-            const next = current.nextElementSibling
-            current.classList.remove('focused')
-            if (next) {
-                next.classList.add('focused')
-                next.scrollIntoView({ block: 'nearest' })
-            } else {
+        if (e.key === 'ArrowDown') {
+            e.preventDefault()
+            if (!current) {
                 options[0]?.classList.add('focused')
                 options[0]?.scrollIntoView({ block: 'nearest' })
-            }
-        }
-    } else if (e.key === 'ArrowUp') {
-        e.preventDefault()
-        if (current) {
-            const prev = current.previousElementSibling
-            current.classList.remove('focused')
-            if (prev) {
-                prev.classList.add('focused')
-                prev.scrollIntoView({ block: 'nearest' })
             } else {
-                options[options.length - 1]?.classList.add('focused')
-                options[options.length - 1]?.scrollIntoView({ block: 'nearest' })
+                const next = current.nextElementSibling
+                current.classList.remove('focused')
+                if (next) {
+                    next.classList.add('focused')
+                    next.scrollIntoView({ block: 'nearest' })
+                } else {
+                    options[0]?.classList.add('focused')
+                    options[0]?.scrollIntoView({ block: 'nearest' })
+                }
             }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault()
+            if (current) {
+                const prev = current.previousElementSibling
+                current.classList.remove('focused')
+                if (prev) {
+                    prev.classList.add('focused')
+                    prev.scrollIntoView({ block: 'nearest' })
+                } else {
+                    options[options.length - 1]?.classList.add('focused')
+                    options[options.length - 1]?.scrollIntoView({ block: 'nearest' })
+                }
+            }
+        } else if (e.key === 'Enter') {
+            if (current) current.click()
         }
-    } else if (e.key === 'Enter') {
-        if (current) current.click()
-    }
-})
+    })
 
-document.getElementById('companion-list').addEventListener('keydown', e => {
-    const options = document.querySelectorAll('.companion-option')
-    const current = document.querySelector('.companion-option.focused')
+    document.getElementById('companion-list').addEventListener('keydown', e => {
+        const options = document.querySelectorAll('.companion-option')
+        const current = document.querySelector('.companion-option.focused')
 
-    if (e.key === 'ArrowDown') {
-        e.preventDefault()
-        if (!current) {
-            options[0]?.classList.add('focused')
-            options[0]?.scrollIntoView({ block: 'nearest' })
-        } else {
-            const next = current.nextElementSibling
-            current.classList.remove('focused')
-            if (next) {
-                next.classList.add('focused')
-                next.scrollIntoView({ block: 'nearest' })
-            } else {
+        if (e.key === 'ArrowDown') {
+            e.preventDefault()
+            if (!current) {
                 options[0]?.classList.add('focused')
                 options[0]?.scrollIntoView({ block: 'nearest' })
-            }
-        }
-    } else if (e.key === 'ArrowUp') {
-        e.preventDefault()
-        if (current) {
-            const prev = current.previousElementSibling
-            current.classList.remove('focused')
-            if (prev) {
-                prev.classList.add('focused')
-                prev.scrollIntoView({ block: 'nearest' })
             } else {
-                options[options.length - 1]?.classList.add('focused')
-                options[options.length - 1]?.scrollIntoView({ block: 'nearest' })
+                const next = current.nextElementSibling
+                current.classList.remove('focused')
+                if (next) {
+                    next.classList.add('focused')
+                    next.scrollIntoView({ block: 'nearest' })
+                } else {
+                    options[0]?.classList.add('focused')
+                    options[0]?.scrollIntoView({ block: 'nearest' })
+                }
             }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault()
+            if (current) {
+                const prev = current.previousElementSibling
+                current.classList.remove('focused')
+                if (prev) {
+                    prev.classList.add('focused')
+                    prev.scrollIntoView({ block: 'nearest' })
+                } else {
+                    options[options.length - 1]?.classList.add('focused')
+                    options[options.length - 1]?.scrollIntoView({ block: 'nearest' })
+                }
+            }
+        } else if (e.key === 'Enter') {
+            if (current) current.click()
         }
-    } else if (e.key === 'Enter') {
-        if (current) current.click()
-    }
 })

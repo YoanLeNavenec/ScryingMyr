@@ -40,6 +40,7 @@ function getTypeGroup(card) {
 function getCmcGroup(card) {
     if (card.isCommander) return 'Commander'
     if (card.isCompanion) return 'Companion'
+    if (card.type.includes('Land')) return 'Lands'
     const CMC = card.manaValue || 0
     if (CMC >= 7) return '7+'
     return `${CMC}`
@@ -67,6 +68,7 @@ function getColorIdentity(card) {
 function getColorGroup(card) {
     if (card.isCommander) return 'Commander'
     if (card.isCompanion) return 'Companion'
+    if (card.type.includes('Land')) return 'Lands'
     const colorIdentity = getColorIdentity(card)
     const colorNames = { W: 'White', U: 'Blue', B: 'Black', R: 'Red', G: 'Green' }
     if (colorIdentity.length === 0) return 'Colorless'
@@ -362,8 +364,8 @@ function groupAndSortDeck(deck, groupBy) {
     }, {})
     const groupOrders = {
         type: ['Commander', 'Companion', 'Planeswalkers', 'Creatures', 'Sorceries', 'Instants', 'Artifacts', 'Enchantments', 'Battles', 'Lands', 'Other'],
-        cmc: ['Commander', 'Companion', '0', '1', '2', '3', '4', '5', '6', '7+'],
-        color: ['Commander', 'Companion', 'White', 'Blue', 'Black', 'Red', 'Green', 'Multicolored', 'Colorless']
+        cmc: ['Commander', 'Companion', '0', '1', '2', '3', '4', '5', '6', '7+', 'Lands'],
+        color: ['Commander', 'Companion', 'White', 'Blue', 'Black', 'Red', 'Green', 'Multicolored', 'Colorless', 'Lands'],
     }
     const order = groupOrders[groupBy]
     return Object.entries(groups).sort(([a], [b]) => {

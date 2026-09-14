@@ -829,4 +829,5 @@ function showCompanionPicker(sideboard, deck) {
         } else if (e.key === 'Enter') {
             if (current) current.click()
         }
-})
+    })
+}

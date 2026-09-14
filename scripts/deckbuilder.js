@@ -363,6 +363,7 @@ function groupAndSortDeck(deck, groupBy) {
     return Object.entries(groups).sort(([a], [b]) => {
         return order.indexOf(a) - order.indexOf(b)
     })
+}
 
 // Render the deck in grid view
 function renderGridView() {
@@ -830,4 +831,3 @@ function showCompanionPicker(sideboard, deck) {
             if (current) current.click()
         }
     })
-}

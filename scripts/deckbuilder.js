@@ -1,6 +1,7 @@
 const deckGrid = document.querySelector('.deck-grid')
 const viewSelect = document.querySelector('.deck-view-select')
 const formatSelector = document.querySelector('.deck-format-selector')
+const groupSelector = document.querySelector('.deck-group')
 const addCardBtn = document.querySelector('.deck-add-btn')
 const addCardModal = document.getElementById('add-card-modal')
 const cardSearchInput = document.getElementById('card-search-input')
@@ -11,6 +12,11 @@ const deckSizeLimits = { commander: 100, cedh: 100, duelcommander: 100}
 
 // Update the deck when the format changes
 formatSelector.addEventListener('change', () => {
+    window.dispatchEvent(new CustomEvent('deck-updated'))
+})
+
+// Update the deck when the type of grouping changes
+groupSelector.addEventListener('change', () => {
     window.dispatchEvent(new CustomEvent('deck-updated'))
 })
 
@@ -367,7 +373,7 @@ function groupAndSortDeck(deck, groupBy) {
 
 // Render the deck in grid view
 function renderGridView() {
-    const sortedGroups = groupAndSortDeck(window.currentDeck)
+    const sortedGroups = groupAndSortDeck(window.currentDeck, groupSelector.value)
 
     sortedGroups.forEach(([groupName, cards]) => {
         const section = document.createElement('div')
@@ -477,7 +483,7 @@ deckGrid.addEventListener('keydown', e => {
 
 // Render the deck in list view
 function renderListView() {
-    const sortedGroups = groupAndSortDeck(window.currentDeck)
+    const sortedGroups = groupAndSortDeck(window.currentDeck, groupSelector.value)
 
     sortedGroups.forEach(([groupName, cards]) => {
         const section = document.createElement('div')

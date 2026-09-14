@@ -344,19 +344,25 @@ function removeCardFromDecklist(card){
 }
 
 // Group and sort the deck by card type
-function groupAndSortDeck(deck) {
+function groupAndSortDeck(deck, groupBy) {
+    const groupFunctions = { type: getTypeGroup, cmc: getCmcGroup, color: getColorGroup }
+    const getGroup = groupFunctions[groupBy]
+
     const groups = deck.reduce((acc, card) => {
-        const group = getTypeGroup(card)
+        const group = getGroup(card)
         if (!acc[group]) acc[group] = []
         acc[group].push(card)
         return acc
     }, {})
-
-    const groupOrder = ['Commander','Companion', 'Planeswalkers', 'Creatures', 'Sorceries', 'Instants', 'Artifacts', 'Enchantments', 'Battles', 'Lands', 'Other']
+    const groupOrders = {
+        type: ['Commander', 'Companion', 'Planeswalkers', 'Creatures', 'Sorceries', 'Instants', 'Artifacts', 'Enchantments', 'Battles', 'Lands', 'Other'],
+        cmc: ['Commander', 'Companion', '0', '1', '2', '3', '4', '5', '6', '7+'],
+        color: ['Commander', 'Companion', 'White', 'Blue', 'Black', 'Red', 'Green', 'Multicolored', 'Colorless']
+    }
+    const order = groupOrders[groupBy]
     return Object.entries(groups).sort(([a], [b]) => {
-      return groupOrder.indexOf(a) - groupOrder.indexOf(b)
+        return order.indexOf(a) - order.indexOf(b)
     })
-}
 
 // Render the deck in grid view
 function renderGridView() {

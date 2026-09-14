@@ -30,6 +30,15 @@ function getTypeGroup(card) {
     return 'Other'
 }
 
+//Determine a card's CMC group
+function getCmcGroup(card) {
+    if (card.isCommander) return 'Commander'
+    if (card.isCompanion) return 'Companion'
+    const CMC = card.manaValue || 0
+    if (CMC >= 7) return '7+'
+    return `${CMC}`
+}
+
 //Checks Color Identity of the card 
 function getColorIdentity(card) {
   if (card.colorIdentity && card.colorIdentity.length > 0) return card.colorIdentity
@@ -46,6 +55,17 @@ function getColorIdentity(card) {
   })
 
   return colors.filter(c => found.has(c))
+}
+
+//Determine a card's color group
+function getColorGroup(card) {
+    if (card.isCommander) return 'Commander'
+    if (card.isCompanion) return 'Companion'
+    const colorIdentity = getColorIdentity(card)
+    const colorNames = { W: 'White', U: 'Blue', B: 'Black', R: 'Red', G: 'Green' }
+    if (colorIdentity.length === 0) return 'Colorless'
+    if (colorIdentity.length === 1) return colorNames[colorIdentity[0]]
+    if (colorIdentity.length > 1) return 'Multicolored'
 }
 
 //sets deck's color identity

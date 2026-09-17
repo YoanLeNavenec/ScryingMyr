@@ -2,6 +2,13 @@ const deckGrid = document.querySelector('.deck-grid')
 const viewSelect = document.querySelector('.deck-view-select')
 const formatSelector = document.querySelector('.deck-format-selector')
 const groupSelector = document.querySelector('.deck-group')
+const groupFunctions = { type: getTypeGroup, cmc: getCmcGroup, color: getColorGroup }
+const groupOrders = {
+        type: ['Commander', 'Companion', 'Planeswalkers', 'Creatures', 'Sorceries', 'Instants', 'Artifacts', 'Enchantments', 'Battles', 'Lands', 'Other'],
+        cmc: ['Commander', 'Companion', '0', '1', '2', '3', '4', '5', '6', '7+', 'Lands'],
+        color: ['Commander', 'Companion', 'White', 'Blue', 'Black', 'Red', 'Green', 'Multicolored', 'Colorless', 'Lands'],
+    }
+const sortSelector = document.querySelector('.deck-sort')
 const addCardBtn = document.querySelector('.deck-add-btn')
 const addCardModal = document.getElementById('add-card-modal')
 const cardSearchInput = document.getElementById('card-search-input')
@@ -18,6 +25,10 @@ formatSelector.addEventListener('change', () => {
 // Update the deck when the type of grouping changes
 groupSelector.addEventListener('change', () => {
     window.dispatchEvent(new CustomEvent('deck-updated'))
+})
+
+sortSelector.addEventListener('change', () => { 
+    window.dispatchEvent(new CustomEvent('deck-updated')) 
 })
 
 // Determine the type group of a card for sorting and grouping
@@ -352,8 +363,7 @@ function removeCardFromDecklist(card){
 }
 
 // Group and sort the deck by card type
-function groupAndSortDeck(deck, groupBy) {
-    const groupFunctions = { type: getTypeGroup, cmc: getCmcGroup, color: getColorGroup }
+function groupAndSortDeck(deck, groupBy, sortBy) {
     const getGroup = groupFunctions[groupBy]
 
     const groups = deck.reduce((acc, card) => {
@@ -362,20 +372,39 @@ function groupAndSortDeck(deck, groupBy) {
         acc[group].push(card)
         return acc
     }, {})
-    const groupOrders = {
-        type: ['Commander', 'Companion', 'Planeswalkers', 'Creatures', 'Sorceries', 'Instants', 'Artifacts', 'Enchantments', 'Battles', 'Lands', 'Other'],
-        cmc: ['Commander', 'Companion', '0', '1', '2', '3', '4', '5', '6', '7+', 'Lands'],
-        color: ['Commander', 'Companion', 'White', 'Blue', 'Black', 'Red', 'Green', 'Multicolored', 'Colorless', 'Lands'],
-    }
     const order = groupOrders[groupBy]
-    return Object.entries(groups).sort(([a], [b]) => {
+
+    const sortedEntries = Object.entries(groups).map(([groupName, cards]) => {
+        return [groupName, sortCards(cards, sortBy)]
+    })
+
+    return sortedEntries.sort(([a], [b]) => {
         return order.indexOf(a) - order.indexOf(b)
     })
 }
 
+//sort cards in a group
+function sortCards(cards, sortBy) {
+    if (sortBy === 'name') {
+        return cards.sort((a, b) => {
+           if (a.name < b.name) return -1
+           if (a.name > b.name) return 1
+           return 0
+        })
+    } else {
+        return cards.sort((a, b) => {
+            const groupA = groupFunctions[sortBy](a)
+            const groupB = groupFunctions[sortBy](b)
+            const indexA = groupOrders[sortBy].indexOf(groupA)
+            const indexB = groupOrders[sortBy].indexOf(groupB)
+            return indexA - indexB
+        })
+    }
+}
+
 // Render the deck in grid view
 function renderGridView() {
-    const sortedGroups = groupAndSortDeck(window.currentDeck, groupSelector.value)
+    const sortedGroups = groupAndSortDeck(window.currentDeck, groupSelector.value, sortSelector.value)
 
     sortedGroups.forEach(([groupName, cards]) => {
         const section = document.createElement('div')
@@ -485,7 +514,7 @@ deckGrid.addEventListener('keydown', e => {
 
 // Render the deck in list view
 function renderListView() {
-    const sortedGroups = groupAndSortDeck(window.currentDeck, groupSelector.value)
+    const sortedGroups = groupAndSortDeck(window.currentDeck, groupSelector.value, sortSelector.value)
 
     sortedGroups.forEach(([groupName, cards]) => {
         const section = document.createElement('div')

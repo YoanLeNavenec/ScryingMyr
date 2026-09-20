@@ -59,6 +59,12 @@ function getCmcGroup(card) {
 
 //Checks Color Identity of the card 
 function getColorIdentity(card) {
+  const rule = window.electronAPI.getRulebreakerRule(card.name)
+  if (rule && rule.kind === 'color-commander' && card.isCommander) {
+    const chosenColor = getChosenColor(card)
+    return [chosenColor].filter(Boolean)
+  }
+
   if (card.colorIdentity && card.colorIdentity.length > 0) return card.colorIdentity
 
   const colors = ['W', 'U', 'B', 'R', 'G']
@@ -714,17 +720,51 @@ function showCommanderPicker(deck) {
                 } else {
                     card.isCommander = true
                     document.getElementById('commander-modal').classList.add('hidden')
-                    window.dispatchEvent(new CustomEvent('deck-updated'))
+
+                    const rule = window.electronAPI.getRulebreakerRule(card.name)
+                    if (rule && rule.kind === 'color-commander') {
+                        showColorPicker(card)
+                    } else {
+                        window.dispatchEvent(new CustomEvent('deck-updated'))
+                    }
                 }
             })
             commanderList.appendChild(option)
         })
     }
-
     selectCommanderPartner(legendaries)
 
     document.getElementById('commander-modal').classList.remove('hidden')
     commanderList.focus()
+}
+
+// Show the color picker modal for a card with requiring color selection
+function showColorPicker(card) {
+    const colorList = document.getElementById('color-list')
+    colorList.innerHTML = ''
+
+    const colors = [
+        { code: 'W', name: 'White' },
+        { code: 'U', name: 'Blue' },
+        { code: 'B', name: 'Black' },
+        { code: 'R', name: 'Red' },
+        { code: 'G', name: 'Green' }
+    ]
+
+    colors.forEach(color => {
+        const option = document.createElement('div')
+        option.classList.add('commander-option')
+        option.textContent = color.name
+        option.addEventListener('click', () => {
+            card.chosenColor = color.code
+            document.getElementById('color-modal').classList.add('hidden')
+            window.dispatchEvent(new CustomEvent('deck-updated'))
+        })
+        colorList.appendChild(option)
+    })
+
+    document.getElementById('color-modal').classList.remove('hidden')
+    colorList.focus()
 }
 
 // Show the companion picker modal if the deck has no companion

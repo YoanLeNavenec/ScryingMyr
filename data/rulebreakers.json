@@ -6,5 +6,8 @@
   "The Unluckiest Planeswalker": { "kind": "type-list", "types": ["Enchantment — Aura"], "exception": "Basic Land"},
   "Grizzlegom, Hurloon Hero": { "kind": "any-land" },
   "Whtz, the Bibliophile": { "kind": "no-max-deck-size" },
-  "Tolabow, Loch Rascal": { "kind": "instant-sorcery-choice", "exception": "Basic Land"}
+  "Tolabow, Loch Rascal": { "kind": "instant-sorcery-choice", "exception": "Basic Land"},
+  "The Prismatic Piper": { "kind": "color-commander" },
+  "Faceless One": { "kind":"color-commander" },
+  "Clara Oswald": { "kind": "color-commander" }
 }

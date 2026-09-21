@@ -350,7 +350,6 @@ function addCardToDecklist(card){
     window.currentDeck.push({...card, quantity: 1, isCommander: false})
   }
   window.dispatchEvent(new CustomEvent('deck-updated'))
-  updateStatsBar()
   showToast(`${card.name} added to deck!`)
 }
 
@@ -364,7 +363,6 @@ function removeCardFromDecklist(card){
             }
         }
     window.dispatchEvent(new CustomEvent('deck-updated'))
-    updateStatsBar()
     showToast(`${card.name} removed from deck!`)
 }
 
@@ -803,16 +801,6 @@ function showCompanionPicker(sideboard, deck) {
 
     document.getElementById('commander-skip-btn').addEventListener('click', () => {
         document.getElementById('commander-modal').classList.add('hidden')
-    })
-
-    window.addEventListener('deck-updated', () => {
-        renderDeck()
-        const deckbuilderVisible = !document.querySelector('.deckbuilding-view').classList.contains('hidden')
-        if (deckbuilderVisible) { 
-            showCommanderPicker(window.currentDeck)
-            const commanderModalShowing = !document.getElementById('commander-modal').classList.contains('hidden')
-            if (!commanderModalShowing) showCompanionPicker(window.currentSideboard, window.currentDeck)
-        }
     })
 
     viewSelect.addEventListener('change', renderDeck)

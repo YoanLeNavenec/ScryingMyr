@@ -334,35 +334,44 @@ cardSearchInput.addEventListener('keydown', e => {
 })
 
 //Add a card to the decklist
+function addCardToDeck(card){
+const existing = window.currentDeck.find(c => c.name === card.name)
+if (existing) {
+  existing.quantity += 1
+} else {
+  window.currentDeck.push({...card, quantity: 1, isCommander: false})
+}
+window.dispatchEvent(new CustomEvent('deck-updated'))
+}
+
 function addCardToDecklist(card){
-  if (!isCardLegalInDeck(card, window.currentDeck)){
-    showToast("This card isn't in the right colors!")
-    return
+  if (!isCardLegalInDeck(card, window.currentDeck)){ 
+    showToast("This card isn't in the right colors!") 
+    return 
+  } 
+  if (isDeckFull(window.currentDeck, formatSelector.value)){ 
+    showToast("Your deck is already full! Time for cuts!") 
+    return 
   }
-  if (isDeckFull(window.currentDeck, formatSelector.value)){
-    showToast("Your deck is already full! Time for cuts!")
-    return
-  }
-  const existing = window.currentDeck.find(c => c.name === card.name)
-  if (existing) {
-    existing.quantity += 1
-  } else {
-    window.currentDeck.push({...card, quantity: 1, isCommander: false})
-  }
-  window.dispatchEvent(new CustomEvent('deck-updated'))
+  addCardToDeck(card)
   showToast(`${card.name} added to deck!`)
 }
 
+
 //Remove a card from the decklist
-function removeCardFromDecklist(card){
+function removeCardFromDeck(card){
     const existing = window.currentDeck.find(c => c.name === card.name)
-        if (existing){
-            existing.quantity -= 1
-            if (existing.quantity <= 0){
-                window.currentDeck = window.currentDeck.filter(c => c.name !== card.name)
-            }
+    if (existing){
+        existing.quantity -= 1
+        if (existing.quantity <= 0){
+            window.currentDeck = window.currentDeck.filter(c => c.name !== card.name)
         }
+    }
     window.dispatchEvent(new CustomEvent('deck-updated'))
+}
+
+function removeCardFromDecklist(card){
+    removeCardFromDeck(card)
     showToast(`${card.name} removed from deck!`)
 }
 
@@ -783,17 +792,21 @@ function showCompanionPicker(sideboard, deck) {
         option.classList.add('companion-option')
         option.textContent = card.name
         option.addEventListener('click', () => {
-            window.currentDeck.push({...card, isCompanion: true})
-            window.currentSideboard = window.currentSideboard.filter(c => c.name !== card.name)
+            addCompanionToDeck(card)
             document.getElementById('companion-modal').classList.add('hidden')
-            window.dispatchEvent(new CustomEvent('deck-updated'))
         })
         companionList.appendChild(option)
     })
 
     document.getElementById('companion-modal').classList.remove('hidden')
     companionList.focus()
-    }
+}
+
+function addCompanionToDeck(card){
+    window.currentDeck.push({...card, isCompanion: true})
+    window.currentSideboard = window.currentSideboard.filter(c => c.name !== card.name)
+    window.dispatchEvent(new CustomEvent('deck-updated'))
+}
 
     document.getElementById('companion-skip-btn').addEventListener('click', () => {
         document.getElementById('companion-modal').classList.add('hidden')

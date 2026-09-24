@@ -11,6 +11,7 @@ const groupOrders = {
 const sortSelector = document.querySelector('.deck-sort')
 const addCardBtn = document.querySelector('.deck-add-btn')
 const addCardModal = document.getElementById('add-card-modal')
+const cardImageModal = document.getElementById('card-image-modal') 
 const cardSearchInput = document.getElementById('card-search-input')
 const cardSearchResults = document.getElementById('card-search-results')
 
@@ -227,6 +228,16 @@ addCardBtn.addEventListener('click', () => {
 document.getElementById('add-card-cancel-btn').addEventListener('click', () => {
   addCardModal.classList.add('hidden')
 })
+
+document.getElementById('card-image-close-btn').addEventListener('click', () => {
+    cardImageModal.classList.add('hidden')
+})
+
+async function showCardImage(card) {
+    const imagePath = await window.electronAPI.getCardImage(card.name)
+    document.getElementById('card-image-content').src = 'file://' + imagePath
+    cardImageModal.classList.remove('hidden')
+}
 
 //Check if the card is banned
 function getBanStatus(card, format) {
@@ -553,6 +564,7 @@ function renderListView() {
             rowName.classList.add('deck-list-name')
             rowName.textContent = card.name
             rowName.title = card.name
+            rowName.addEventListener('click', () => showCardImage(card))
 
             const rowMana = document.createElement('span')
             rowMana.classList.add('deck-list-mana')

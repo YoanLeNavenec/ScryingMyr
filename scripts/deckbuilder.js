@@ -233,10 +233,25 @@ document.getElementById('card-image-close-btn').addEventListener('click', () => 
     cardImageModal.classList.add('hidden')
 })
 
+// Show the card image modal when a card is clicked
 async function showCardImage(card) {
     const imagePath = await window.electronAPI.getCardImage(card.name)
     document.getElementById('card-image-content').src = 'file://' + imagePath
     cardImageModal.classList.remove('hidden')
+}
+
+// Load the card image and display it in grid view
+async function loadCardImage(card, cardEl) {
+    try {
+        const cardImage = await window.electronAPI.getCardImage(card.name)
+        const cardImg = document.createElement('img')
+        cardImg.src = 'file://' + cardImage
+        cardImg.classList.add('deck-card-image')
+        cardEl.appendChild(cardImg)
+        cardEl.classList.add('has-image')
+    } catch (error) {
+        console.log("couldn't find card image!")
+    }
 }
 
 //Check if the card is banned
@@ -460,7 +475,7 @@ function renderGridView() {
                 badge.title = 'Warning: Only one copy per card allowed in this format!'
               }
               badge.textContent = `x${card.quantity}`
-              cardTop.appendChild(badge)
+              cardEl.appendChild(badge)
             }
 
             const cardName = document.createElement('p')
@@ -507,6 +522,7 @@ function renderGridView() {
             cardEl.appendChild(cardPT)
             cardEl.appendChild(cardDel)
             cardGrid.appendChild(cardEl)
+            loadCardImage(card, cardEl)
         })
 
         section.appendChild(cardGrid)

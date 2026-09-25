@@ -118,7 +118,7 @@ ipcMain.handle('get-card-image', async (event, cardName) => {
       }
     })
     const cardData = await response.json()
-    const imageUrl = cardData.image_uris.normal
+    const imageUrl = cardData.image_uris ? cardData.image_uris.normal : cardData.card_faces[0].image_uris.normal
 
     const imageResponse = await fetch(imageUrl, {
       headers: {

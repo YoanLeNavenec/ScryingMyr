@@ -219,6 +219,9 @@
     font-weight: 600;
     white-space: nowrap;
     align-self: flex-start;
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
 }
 
 .deck-card-quantity--warning{
@@ -336,4 +339,11 @@
 .deck-card-warning, .deck-list-warning {
     cursor: help;
     font-size: 0.9rem;
+}
+
+.deck-card.has-image .deck-card-top,
+.deck-card.has-image .deck-card-type,
+.deck-card.has-image .deck-card-text,
+.deck-card.has-image .deck-card-pt {
+    display: none;
 }

@@ -20,6 +20,7 @@ async function loadCardImage(card, cardEl) {
         cardImg.classList.add('deck-card-image')
         cardEl.appendChild(cardImg)
         cardEl.classList.add('has-image')
+        cardImg.addEventListener('click', () => showCardImage(card))
     } catch (error) {
         console.log("couldn't find card image!")
     }

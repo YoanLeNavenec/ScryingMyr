@@ -78,77 +78,92 @@ function createWindow() {
       }
     })
 
-ipcMain.handle('lookup-card', (event, cardName) => {
-    const cleanCardsPath = path.join(__dirname, 'data', 'cleanCards.json')
-    if (!fs.existsSync(cleanCardsPath)) return null
+    ipcMain.handle('lookup-card', (event, cardName) => {
+        const cleanCardsPath = path.join(__dirname, 'data', 'cleanCards.json')
+        if (!fs.existsSync(cleanCardsPath)) return null
 
-    if (!cleanCardsCache) {
-        cleanCardsCache = JSON.parse(fs.readFileSync(cleanCardsPath, 'utf8'))
-    }
+        if (!cleanCardsCache) {
+            cleanCardsCache = JSON.parse(fs.readFileSync(cleanCardsPath, 'utf8'))
+        }
 
-    const normalize = name => name.toLowerCase()
-    .replace(/\s*\/\/?\s*/g, '/')
-    .replace(/_+/g, '_')
-    const normalizedInput = normalize(cardName)
+        const normalize = name => name.toLowerCase()
+        .replace(/\s*\/\/?\s*/g, '/')
+        .replace(/_+/g, '_')
+        const normalizedInput = normalize(cardName)
 
-    return cleanCardsCache.find(c => {
-        if (!c.name) return false
-        // exact match
-        if (normalize(c.name) === normalizedInput) return true
-        // front face match for double-faced/adventure cards
-        if (normalize(c.name).startsWith(normalizedInput + '/')) return true
-        // flavor name match (Secret Lair reskins like Will the Wise / Wernog)
-        if (c.flavorNames && c.flavorNames.some(f => normalize(f) === normalizedInput)) return true
-        return false
-    }) || null
-})
+        return cleanCardsCache.find(c => {
+            if (!c.name) return false
+            // exact match
+            if (normalize(c.name) === normalizedInput) return true
+            // front face match for double-faced/adventure cards
+            if (normalize(c.name).startsWith(normalizedInput + '/')) return true
+            // flavor name match (Secret Lair reskins like Will the Wise / Wernog)
+            if (c.flavorNames && c.flavorNames.some(f => normalize(f) === normalizedInput)) return true
+            return false
+        }) || null
+    })
 
-//fetch-on-first-use image caching
-ipcMain.handle('get-card-image', async (event, cardName) => {
-    const filePath = path.join(imagesPath, safeFilename(cardName) + '.jpg')
+    //fetch-on-first-use image caching
+    ipcMain.handle('get-card-image', async (event, cardName) => {
+        const filePath = path.join(imagesPath, safeFilename(cardName) + '.jpg')
 
-    if (fs.existsSync(filePath)) {
+        if (fs.existsSync(filePath)) {
+            return filePath
+        }
+
+        const response = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(cardName)}`, {
+          headers: {
+              'User-Agent': 'ScryingMyr/1.0',
+              'Accept': 'application/json'
+          }
+        })
+        const cardData = await response.json()
+        const imageUrl = cardData.image_uris ? cardData.image_uris.normal : cardData.card_faces[0].image_uris.normal
+
+        const imageResponse = await fetch(imageUrl, {
+          headers: {
+            'User-Agent': 'ScryingMyr/1.0',
+            'Accept': 'image/*'
+          }
+        })
+        const buffer = Buffer.from(await imageResponse.arrayBuffer())
+        fs.writeFileSync(filePath, buffer)
+
+        if (!cardData.image_uris) {
+            const backImageUrl = cardData.card_faces[1].image_uris.normal
+            const backImageResponse = await fetch(backImageUrl, {
+              headers: { 'User-Agent': 'ScryingMyr/1.0', 'Accept': 'image/*' }
+            })
+            const backBuffer = Buffer.from(await backImageResponse.arrayBuffer())
+            const backFilePath = path.join(imagesPath, safeFilename(cardName) + '_back.jpg')
+            fs.writeFileSync(backFilePath, backBuffer)
+        }
+
         return filePath
-    }
-
-    const response = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(cardName)}`, {
-      headers: {
-          'User-Agent': 'ScryingMyr/1.0',
-          'Accept': 'application/json'
-      }
     })
-    const cardData = await response.json()
-    const imageUrl = cardData.image_uris ? cardData.image_uris.normal : cardData.card_faces[0].image_uris.normal
 
-    const imageResponse = await fetch(imageUrl, {
-      headers: {
-        'User-Agent': 'ScryingMyr/1.0',
-        'Accept': 'image/*'
-      }
+    ipcMain.handle('has-card-back-face', (event, cardName) => {
+        const backCardFile = path.join(imagesPath, safeFilename(cardName) + '_back.jpg')
+        return fs.existsSync(backCardFile)
     })
-    const buffer = Buffer.from(await imageResponse.arrayBuffer())
-    fs.writeFileSync(filePath, buffer)
 
-    return filePath
-})
+    });
 
-});
+    ipcMain.handle('search-cards', (event, query) => {
+      const cleanCardsPath = path.join(__dirname, 'data', 'cleanCards.json')
+      if (!fs.existsSync(cleanCardsPath)) return []
 
-ipcMain.handle('search-cards', (event, query) => {
-  const cleanCardsPath = path.join(__dirname, 'data', 'cleanCards.json')
-  if (!fs.existsSync(cleanCardsPath)) return []
+      if (!cleanCardsCache) {
+        cleanCardsCache = JSON.parse(fs.readFileSync(cleanCardsPath, 'utf8'))
+      }
 
-  if (!cleanCardsCache) {
-    cleanCardsCache = JSON.parse(fs.readFileSync(cleanCardsPath, 'utf8'))
-  }
-
-  const lower = query.toLowerCase()
-  return cleanCardsCache
-    .filter(c => c.name && c.name.toLowerCase().includes(lower))
-    .slice(0, 10)
-})
-  
-  app.on('window-all-closed', () => {
-    app.quit();
-  }
+      const lower = query.toLowerCase()
+      return cleanCardsCache
+        .filter(c => c.name && c.name.toLowerCase().includes(lower))
+        .slice(0, 10)
+    })
+      
+      app.on('window-all-closed', () => {
+        app.quit();
+      }
 );

@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   listConversations: () => ipcRenderer.invoke('list-conversations'),
   checkFirstLaunch: () => ipcRenderer.invoke('check-first-launch'),
   getCardImage: (cardName) => ipcRenderer.invoke('get-card-image', cardName),
+  hasCardBackFace: (cardName) => ipcRenderer.invoke('has-card-back-face', cardName),
   importDeck: (text, format) => importDeckList(text, format),
   exportDeck: (deck) => exportDeckList(deck),
   lookupCard: (cardName) => ipcRenderer.invoke('lookup-card', cardName),

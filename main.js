@@ -144,7 +144,7 @@ function createWindow() {
 
     ipcMain.handle('has-card-back-face', (event, cardName) => {
         const backCardFile = path.join(imagesPath, safeFilename(cardName) + '_back.jpg')
-        return fs.existsSync(backCardFile)
+        return fs.existsSync(backCardFile) ? backCardFile : null
     })
 
     });

@@ -5,9 +5,12 @@ document.getElementById('card-image-close-btn').addEventListener('click', () => 
 })
 
 // Show the card image modal when a card is clicked
-async function showCardImage(card) {
-    const imagePath = await window.electronAPI.getCardImage(card.name)
-    document.getElementById('card-image-content').src = 'file://' + imagePath
+async function showCardImage(card, src) {
+    if (!src) {
+        const imagePath = await window.electronAPI.getCardImage(card.name)
+        src = 'file://' + imagePath
+    }
+    document.getElementById('card-image-content').src = src
     cardImageModal.classList.remove('hidden')
 }
 
@@ -20,7 +23,22 @@ async function loadCardImage(card, cardEl) {
         cardImg.classList.add('deck-card-image')
         cardEl.appendChild(cardImg)
         cardEl.classList.add('has-image')
-        cardImg.addEventListener('click', () => showCardImage(card))
+        cardImg.addEventListener('click', () => showCardImage(card, cardImg.src))
+
+        const backImage = await window.electronAPI.hasCardBackFace(card.name)
+        if (backImage) {
+            const flipBtn = document.createElement('button')
+            flipBtn.classList.add('deck-card-flip')
+            flipBtn.textContent = '⟲'
+
+            let showingBack = false
+            flipBtn.addEventListener('click', () => {
+                showingBack = !showingBack
+                cardImg.src = showingBack ? 'file://' + backImage : 'file://' + cardImage
+            })
+
+            cardEl.appendChild(flipBtn)
+        }
     } catch (error) {
         console.log("couldn't find card image!")
     }

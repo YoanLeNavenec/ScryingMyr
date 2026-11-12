@@ -8,6 +8,16 @@ function safeFilename(name) {
   return name.replace(/[^a-zA-Z0-9]/g, '_')
 }
 
+async function askLLM(prompt) {
+    const response = await fetch('http://127.0.0.1:11434/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: 'qwen2.5:1.5b', prompt: prompt, stream: false })
+    })
+    const data = await response.json()
+    return data.response
+}
+
 function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -37,6 +47,10 @@ function createWindow() {
     };
 
     createWindow();
+
+    ipcMain.handle('ask-llm', async (event, prompt) => {
+        return await askLLM(prompt)
+    })
 
     ipcMain.handle('load-conversation', (event, conversationId) => {
       const filePath = path.join(conversationsPath, `${conversationId}.json`)
